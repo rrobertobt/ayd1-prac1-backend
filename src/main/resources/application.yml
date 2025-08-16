@@ -1,0 +1,9 @@
+server:
+  port: 8080
+spring:
+  application:
+  name: taller
+  datasource:
+    url: 'jdbc:postgresql://localhost:5432/taller'
+    username: postgres
+    password: diegousac17
