@@ -1,0 +1,18 @@
+package ayd.back.taller.repository.enums;
+
+public enum LogTypeEnum {
+
+    AVANCE,
+    DIAGNOSTICO,
+    OBSERVACIOM,
+    SINTOMA_DETECTADO,
+    IMPREVISTO,
+    REPORTAR_DAÑO_ADICIONAL,
+    SOLICITUD_SERVICIO_ADICIONAL,
+    SOLICITUD_DE_ESPECIALISTA,
+    PRUEBA_TECNICA,
+    SUGERENCIA,
+    COMENTARIO,
+    APROBACION
+
+}

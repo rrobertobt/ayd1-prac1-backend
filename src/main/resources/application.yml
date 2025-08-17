@@ -4,6 +4,6 @@ spring:
   application:
   name: taller
   datasource:
-    url: 'jdbc:postgresql://localhost:5432/taller'
+    url: 'jdbc:postgresql://localhost:5432/ayd1_prac1'
     username: postgres
     password: diegousac17
