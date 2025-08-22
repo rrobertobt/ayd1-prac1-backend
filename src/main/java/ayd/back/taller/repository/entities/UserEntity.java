@@ -5,13 +5,12 @@ import ayd.back.taller.mappers.ConverterEnumColumn;
 import ayd.back.taller.repository.enums.TwofaMethodEnum;
 import ayd.back.taller.repository.enums.UserRoleEnum;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 @Entity

@@ -20,10 +20,19 @@ public class UserMapper {
     public UserEntity toUserEntity(NewUserDto userDto){
 
         String passwordHashed = authUtils.hashPassword(userDto.getPassword());
-        return UserEntity.builder().role(userDto.getRole()).email(userDto.getEmail()).nit(userDto.getNit()).name(userDto.getName())
-                .address(userDto.getAddress()).phoneNumber(userDto.getPhoneNumber()).password(passwordHashed)
-                .isActive(Boolean.TRUE).twofaMethod(TwofaMethodEnum.valueOf(userDto.getTwofaMethod()))
-                .createdAt(LocalDateTime.now()).build();
+        UserEntity user = new UserEntity();
+        user.setRole(userDto.getRole());
+        user.setEmail(userDto.getEmail());
+        user.setNit(userDto.getNit());
+        user.setName(userDto.getName());
+        user.setAddress(userDto.getAddress());
+        user.setPhoneNumber(userDto.getPhoneNumber());
+        user.setPassword(passwordHashed);
+        user.setIsActive(Boolean.TRUE);
+        user.setTwofaMethod(TwofaMethodEnum.valueOf(userDto.getTwofaMethod()));
+        user.setCreatedAt(LocalDateTime.now());
+
+        return user;
     }
 
 }

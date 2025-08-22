@@ -4,7 +4,7 @@ import ayd.back.taller.dto.request.NewUserDto;
 import ayd.back.taller.dto.response.ResponseSuccessDto;
 import ayd.back.taller.exception.BusinessException;
 import ayd.back.taller.mappers.UserMapper;
-import ayd.back.taller.repository.crud_repository.UserCrud;
+import ayd.back.taller.repository.crud.UserCrud;
 import ayd.back.taller.repository.entities.UserEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
+import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -38,6 +39,17 @@ public class UserService {
         log.info("the user was saved successfully");
 
         return ResponseSuccessDto.builder().code(HttpStatus.CREATED).message("The user was saved").build();
+    }
+
+
+    public UserEntity getUserByEmail(String email){
+        Optional<UserEntity> optionalUserEntity = userCrud.getUserByEmail(email);
+
+        if(optionalUserEntity.isEmpty()){
+            throw new BusinessException(HttpStatus.NOT_FOUND,"user not found");
+        }
+
+        return optionalUserEntity.get();
     }
 
 
