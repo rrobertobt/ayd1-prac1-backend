@@ -2,8 +2,7 @@ package ayd.back.taller.service;
 
 
 import ayd.back.taller.config.ApplicationProperties;
-import ayd.back.taller.dto.request.LogInDto;
-import ayd.back.taller.dto.request.VerifyCodeDto;
+import ayd.back.taller.dto.request.*;
 import ayd.back.taller.dto.response.ResponseSuccessDto;
 import ayd.back.taller.exception.BusinessException;
 import ayd.back.taller.repository.crud.CodeRepository;
@@ -17,9 +16,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.web.authentication.password.HaveIBeenPwnedRestApiPasswordChecker;
 import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.Option;
+import java.util.Date;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -78,7 +79,7 @@ public class AuthService {
         log.info("The code was saved successfully");
     }
 
-    public void verifyCode(VerifyCodeDto verifyCodeDto){
+    public ResponseSuccessDto verifyCode(VerifyCodeDto verifyCodeDto){
         if(Objects.isNull(verifyCodeDto.getCode())){
             throw new BusinessException(HttpStatus.BAD_REQUEST,"The code must not be null");
         }
@@ -91,8 +92,48 @@ public class AuthService {
 
         CodeEntity codeEntity = optionalCodeEntity.get();
 
+        if(codeEntity.getExpiresAt().before(new Date())){
+            throw new BusinessException(HttpStatus.UNAUTHORIZED,"The code has expired");
+        }
+
         if(codeEntity.getIsUsed()){
             throw new BusinessException(HttpStatus.UNAUTHORIZED,"The code has already been used");
         }
+
+        codeEntity.setIsUsed(Boolean.TRUE);
+        codeRepository.save(codeEntity);
+        return ResponseSuccessDto.builder().code(HttpStatus.ACCEPTED).message("The code is valid").build();
+
     }
+
+
+    public ResponseSuccessDto passwordRecovery(PasswordRecoveryDto passwordRecoveryDto){
+        if(Objects.isNull(passwordRecoveryDto.getUserEmail())){
+            throw new BusinessException(HttpStatus.BAD_REQUEST,"The user email must not be null");
+        }
+
+        UserEntity userEntity = userService.getUserByEmail(passwordRecoveryDto.getUserEmail());
+        String code = authUtils.generateVerificationCode();
+        saveOrUpdateAuthCode(code,userEntity);
+        emailService.sendEmail(userEntity.getEmail(), applicationProperties.getIssueRecoveryPassword(),code);
+
+        return ResponseSuccessDto.builder().code(HttpStatus.OK).message("A code has been sent to recover the password.").build();
+    }
+
+
+    public ResponseSuccessDto resetPassword(ResetPasswordDto resetPasswordDto){
+
+        UserEntity userEntity = userService.getUserByEmail(resetPasswordDto.getUserEmail());
+
+        if(!resetPasswordDto.getNewPassword().equals(resetPasswordDto.getConfirmPassword())){
+            throw new BusinessException(HttpStatus.BAD_REQUEST,"the passwords do not match");
+        }
+
+        String newPasswordHash = authUtils.hashPassword(resetPasswordDto.getNewPassword());
+        userEntity.setPassword(newPasswordHash);
+        userService.updateUser(userEntity);
+
+        return ResponseSuccessDto.builder().code(HttpStatus.OK).message("The password has been reset").build();
+    }
+
 }

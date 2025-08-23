@@ -17,5 +17,8 @@ public class ApplicationProperties {
     @Value("${spring.mail.message}")
     private String message;
 
+    @Value("${mail.recovery_subject}")
+    private String issueRecoveryPassword;
+
 
 }

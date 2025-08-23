@@ -52,7 +52,12 @@ public class UserService {
         return optionalUserEntity.get();
     }
 
-
+    public void updateUser(UserEntity user){
+        if(Objects.isNull(user)){
+            throw new BusinessException(HttpStatus.BAD_REQUEST,"the user must not be null");
+        }
+        userCrud.save(user);
+    }
 
 
 }

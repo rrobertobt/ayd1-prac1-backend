@@ -2,6 +2,8 @@ package ayd.back.taller.controller;
 
 import ayd.back.taller.controller.api.AuthApi;
 import ayd.back.taller.dto.request.LogInDto;
+import ayd.back.taller.dto.request.PasswordRecoveryDto;
+import ayd.back.taller.dto.request.ResetPasswordDto;
 import ayd.back.taller.dto.request.VerifyCodeDto;
 import ayd.back.taller.dto.response.ResponseSuccessDto;
 import ayd.back.taller.service.AuthService;
@@ -26,6 +28,25 @@ public class AuthController implements AuthApi {
 
     @Override
     public ResponseEntity<ResponseSuccessDto> verifyCode(VerifyCodeDto verifyCodeDto) {
-        return null;
+        log.info("POST auth/code/verify");
+        ResponseSuccessDto responseSuccessDto = authService.verifyCode(verifyCodeDto);
+        return new ResponseEntity<>(responseSuccessDto,responseSuccessDto.getCode());
     }
+
+    @Override
+    public ResponseEntity<ResponseSuccessDto> passwordrecovery(PasswordRecoveryDto passwordRecoveryDto) {
+        log.info("password/recovery");
+        ResponseSuccessDto passwordRecovery = authService.passwordRecovery(passwordRecoveryDto);
+        ResponseSuccessDto responseSuccessDto = authService.passwordRecovery(passwordRecoveryDto);
+        return new ResponseEntity<>(responseSuccessDto, responseSuccessDto.getCode());
+    }
+
+    @Override
+    public ResponseEntity<ResponseSuccessDto> resetPassword(ResetPasswordDto resetPasswordDto) {
+        log.info("POST password/reset");
+        ResponseSuccessDto responseSuccessDto = authService.resetPassword(resetPasswordDto);
+        return new ResponseEntity<>(responseSuccessDto,responseSuccessDto.getCode());
+    }
+
+
 }

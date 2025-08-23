@@ -23,3 +23,5 @@ spring:
     approval:
       issue: Credenciales de Acceso
       message: Tu cuenta ha sido aprobada. Estas son tus credenciales
+mail:
+  recovery_subject: Código de Recuperación de Contraseña.
