@@ -14,4 +14,6 @@ public class ResponseSuccessDto {
 
     private String message;
 
+    private Object body;
+
 }

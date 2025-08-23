@@ -1,8 +1,5 @@
 package ayd.back.taller.dto.request;
 
-import ayd.back.taller.repository.enums.TwofaMethodEnum;
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import jakarta.persistence.Column;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

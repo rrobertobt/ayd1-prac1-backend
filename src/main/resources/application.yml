@@ -7,3 +7,21 @@ spring:
     url: 'jdbc:postgresql://localhost:5432/ayd1_prac1'
     username: postgres
     password: diegousac17
+  mail:
+    issue: Código de Verificación
+    message: Código para iniciar sesión
+    host: smtp.gmail.com
+    port: 587
+    username: deepgptsolutions@gmail.com
+    password: bypr fpxa vzpm ywpr
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+    approval:
+      issue: Credenciales de Acceso
+      message: Tu cuenta ha sido aprobada. Estas son tus credenciales
+mail:
+  recovery_subject: Código de Recuperación de Contraseña.
