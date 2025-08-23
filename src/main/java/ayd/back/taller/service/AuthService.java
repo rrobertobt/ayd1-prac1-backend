@@ -4,6 +4,7 @@ package ayd.back.taller.service;
 import ayd.back.taller.config.ApplicationProperties;
 import ayd.back.taller.dto.request.*;
 import ayd.back.taller.dto.response.ResponseSuccessDto;
+import ayd.back.taller.dto.response.UserInfoDto;
 import ayd.back.taller.exception.BusinessException;
 import ayd.back.taller.repository.crud.CodeRepository;
 import ayd.back.taller.repository.entities.CodeEntity;
@@ -102,7 +103,9 @@ public class AuthService {
 
         codeEntity.setIsUsed(Boolean.TRUE);
         codeRepository.save(codeEntity);
-        return ResponseSuccessDto.builder().code(HttpStatus.ACCEPTED).message("The code is valid").build();
+
+        UserInfoDto userInfoDto = UserInfoDto.builder().email(codeEntity.getUser().getEmail()).role(codeEntity.getUser().getRole()).build();
+        return ResponseSuccessDto.builder().code(HttpStatus.ACCEPTED).message("The code is valid").body(userInfoDto).build();
 
     }
 
