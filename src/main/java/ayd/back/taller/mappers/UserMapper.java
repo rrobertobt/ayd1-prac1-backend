@@ -21,7 +21,7 @@ public class UserMapper {
 
         String passwordHashed = authUtils.hashPassword(userDto.getPassword());
         UserEntity user = new UserEntity();
-        user.setRole(userDto.getRole());
+        user.setRole(UserRoleEnum.valueOf(userDto.getRole()));
         user.setEmail(userDto.getEmail());
         user.setNit(userDto.getNit());
         user.setName(userDto.getName());
