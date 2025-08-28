@@ -35,7 +35,7 @@ public class AuthController implements AuthApi {
 
     @Override
     public ResponseEntity<ResponseSuccessDto> passwordrecovery(PasswordRecoveryDto passwordRecoveryDto) {
-        log.info("password/recovery");
+        log.info("POST auth/password/recovery");
         ResponseSuccessDto passwordRecovery = authService.passwordRecovery(passwordRecoveryDto);
         ResponseSuccessDto responseSuccessDto = authService.passwordRecovery(passwordRecoveryDto);
         return new ResponseEntity<>(responseSuccessDto, responseSuccessDto.getCode());
@@ -43,7 +43,7 @@ public class AuthController implements AuthApi {
 
     @Override
     public ResponseEntity<ResponseSuccessDto> resetPassword(ResetPasswordDto resetPasswordDto) {
-        log.info("POST password/reset");
+        log.info("POST auth/password/reset");
         ResponseSuccessDto responseSuccessDto = authService.resetPassword(resetPasswordDto);
         return new ResponseEntity<>(responseSuccessDto,responseSuccessDto.getCode());
     }
