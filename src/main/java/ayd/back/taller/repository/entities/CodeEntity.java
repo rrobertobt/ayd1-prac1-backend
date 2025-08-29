@@ -1,5 +1,8 @@
 package ayd.back.taller.repository.entities;
 
+import ayd.back.taller.repository.enums.TwofaMethodEnum;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -31,8 +34,10 @@ public class CodeEntity {
     @Column(name = "is_used")
     private Boolean isUsed;
 
-    @Column(name = "twofa_method")
-    private String twofaMethod;
+    @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(name = "twofa_method", columnDefinition = "twofa_method_t")
+    private TwofaMethodEnum twofaMethod;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;

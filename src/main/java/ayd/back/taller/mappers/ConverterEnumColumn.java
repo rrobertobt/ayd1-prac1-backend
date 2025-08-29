@@ -7,7 +7,9 @@ import jakarta.persistence.Converter;
 
 import java.util.Objects;
 
-@Converter(autoApply = true)
+// NOTE: Disabled auto-apply to avoid interfering with PostgreSQL enum columns.
+// If you need string-based storage for enums in non-enum columns, enable selectively on the field.
+@Converter(autoApply = false)
 public class ConverterEnumColumn implements AttributeConverter<UserRoleEnum, String> {
 
 
