@@ -32,7 +32,7 @@ public class SessionService {
             sessionRepository.save(sessionEntity);
         }else{
             SessionEntity actualSession = optionalSessionEntity.get();
-            sessionRepository.updateToken(actualSession.getToken(), sessionEntity.getToken());
+            sessionRepository.updateToken(sessionEntity.getToken(),actualSession.getToken());
         }
     }
 

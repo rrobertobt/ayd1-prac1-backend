@@ -112,15 +112,13 @@ public class AuthService {
         codeEntity.setIsUsed(Boolean.TRUE);
         codeRepository.save(codeEntity);
 
-        sessionService.saveOrUpdateSessionEntity(new SessionEntity());
-
-        UserEntity userEntity = codeEntity.getUser();
-
         SessionEntity sessionEntity = new SessionEntity();
         String token = authUtils.generateVerificationCode();
         sessionEntity.setToken(token);
         sessionEntity.setUser(codeEntity.getUser());
         sessionEntity.setExpiredAt(authUtils.createExpirationDate(3600));
+
+        sessionService.saveOrUpdateSessionEntity(sessionEntity);
 
 
         UserInfoDto userInfoDto = UserInfoDto.builder()
