@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.Optional;
 
 @Repository
@@ -18,7 +19,7 @@ public interface SessionRepository extends JpaRepository<SessionEntity, String> 
 
     @Transactional
     @Modifying
-    @Query(value = "UPDATE session SET token = ? WHERE token = ? ;", nativeQuery = true)
-    void updateToken(String newToken, String actualToken);
+    @Query(value = "UPDATE session SET token = ? , expired_at = ? WHERE token = ? ;", nativeQuery = true)
+    void updateToken(String newToken, Date expiredAt, String actualToken);
 
 }

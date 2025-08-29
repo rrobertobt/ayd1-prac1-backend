@@ -1,5 +1,6 @@
 package ayd.back.taller.service;
 
+import ayd.back.taller.dto.response.ResponseSuccessDto;
 import ayd.back.taller.dto.response.SessionResponseDto;
 import ayd.back.taller.exception.BusinessException;
 import ayd.back.taller.repository.crud.SessionRepository;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.Option;
 import java.nio.charset.StandardCharsets;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Optional;
@@ -31,9 +33,17 @@ public class SessionService {
         if(optionalSessionEntity.isEmpty()){
             sessionRepository.save(sessionEntity);
         }else{
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(new Date());
+            calendar.add(Calendar.HOUR_OF_DAY, 1);
             SessionEntity actualSession = optionalSessionEntity.get();
-            sessionRepository.updateToken(sessionEntity.getToken(),actualSession.getToken());
+            sessionRepository.updateToken(sessionEntity.getToken(),calendar.getTime(), actualSession.getToken());
         }
+    }
+
+    public ResponseSuccessDto getSessionInfo(String sessionToken){
+        SessionResponseDto sessionResponseDto = validateSessionToken(sessionToken);
+        return ResponseSuccessDto.builder().code(HttpStatus.ACCEPTED).message("The session token is valid").body(sessionResponseDto).build();
     }
 
     public SessionResponseDto validateSessionToken(String sessionToken){
