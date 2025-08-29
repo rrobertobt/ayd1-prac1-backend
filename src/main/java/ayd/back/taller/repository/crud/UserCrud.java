@@ -13,4 +13,7 @@ public interface UserCrud extends JpaRepository<UserEntity, Integer> {
     @Query(value = "SELECT * FROM users WHERE email = ?;", nativeQuery = true)
     Optional<UserEntity> getUserByEmail(String email);
 
+    @Query(value = "SELECT * FROM users WHERE nit = ?;", nativeQuery = true)
+    Optional<UserEntity> getUserByNit(Integer nit);
+
 }

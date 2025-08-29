@@ -7,6 +7,8 @@ import lombok.Getter;
 @Getter
 public class VerifyCodeDto {
 
+    private String userEmail;
+
     private String code;
 
 }

@@ -11,6 +11,7 @@ import jdk.jfr.ContentType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @RequestMapping("/user")
@@ -31,7 +32,23 @@ public interface UserApi {
             }
     )
     @PostMapping
-    ResponseEntity<ResponseSuccessDto> saveUser(@RequestBody NewUserDto newUserDto);
+    ResponseEntity<ResponseSuccessDto> saveUser(@RequestBody NewUserDto newUserDto, @RequestHeader(value = "session-token") String token);
+
+
+    @Operation(
+            summary = "Registro de nuevo cliente",
+            description = "Creación de la cuenta para  un nuevo cliente",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "201",
+                            description = "Usuario creado correctamente",
+                            content = @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = ResponseSuccessDto.class))
+                    )
+            }
+    )
+    @PostMapping("/account")
+    ResponseEntity<ResponseSuccessDto> userRegistry(@RequestBody NewUserDto newUserDto);
 
 
 }

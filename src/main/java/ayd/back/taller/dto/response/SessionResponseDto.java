@@ -5,15 +5,18 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-@Builder
+import java.util.Date;
+
 @Getter
 @Setter
-public class UserInfoDto {
+@Builder
+public class SessionResponseDto {
 
-    private String email;
+    private String userEmail;
 
     private UserRoleEnum role;
 
-    private String sessionToken;
+    private Date expiredAt;
+
 
 }
