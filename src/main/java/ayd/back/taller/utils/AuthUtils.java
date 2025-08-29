@@ -36,11 +36,11 @@ public class AuthUtils {
         return sb.toString();
     }
 
-    public Date createExpirationDate() {
+    public Date createExpirationDate(Integer minutes) {
         Date actualDate = new Date();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(actualDate);
-        calendar.add(Calendar.MINUTE, 1);
+        calendar.add(Calendar.MINUTE, minutes);
         return calendar.getTime();
     }
 

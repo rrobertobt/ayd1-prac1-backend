@@ -19,9 +19,16 @@ public class UserController implements UserApi {
     private final UserService userService;
 
     @Override
-    public ResponseEntity<ResponseSuccessDto> saveUser(NewUserDto newUserDto) {
-        log.info("POST /user");
-        ResponseSuccessDto responseSuccessDto = userService.saveUser(newUserDto);
+    public ResponseEntity<ResponseSuccessDto> saveUser(NewUserDto newUserDto, String sessionToken) {
+        log.info("POST /user with header session-token");
+        ResponseSuccessDto responseSuccessDto = userService.createUser(newUserDto, sessionToken);
         return new ResponseEntity<>(responseSuccessDto, responseSuccessDto.getCode());
+    }
+
+    @Override
+    public ResponseEntity<ResponseSuccessDto> userRegistry(NewUserDto newUserDto) {
+        log.info("POST user/account");
+        ResponseSuccessDto responseSuccessDto = userService.userRegistry(newUserDto);
+        return new ResponseEntity<>(responseSuccessDto,responseSuccessDto.getCode());
     }
 }

@@ -8,6 +8,7 @@ import ayd.back.taller.dto.response.UserInfoDto;
 import ayd.back.taller.exception.BusinessException;
 import ayd.back.taller.repository.crud.CodeRepository;
 import ayd.back.taller.repository.entities.CodeEntity;
+import ayd.back.taller.repository.entities.SessionEntity;
 import ayd.back.taller.repository.entities.UserEntity;
 import ayd.back.taller.repository.enums.UserRoleEnum;
 import ayd.back.taller.utils.AuthUtils;
@@ -42,6 +43,8 @@ public class AuthService {
 
     private final EmailService emailService;
 
+    private final SessionService sessionService;
+
     public ResponseSuccessDto logIn(LogInDto logInDto){
         UserEntity user = userService.getUserByEmail(logInDto.getEmail());
 
@@ -75,7 +78,7 @@ public class AuthService {
         }
 
         codeEntity.setCode(code);
-        codeEntity.setExpiresAt(authUtils.createExpirationDate());
+        codeEntity.setExpiresAt(authUtils.createExpirationDate(1));
         codeEntity.setIsUsed(Boolean.FALSE);
         codeRepository.save(codeEntity);
         log.info("The code was saved successfully");
@@ -102,10 +105,28 @@ public class AuthService {
             throw new BusinessException(HttpStatus.UNAUTHORIZED,"The code has already been used");
         }
 
+        if(!codeEntity.getUser().getEmail().equals(verifyCodeDto.getUserEmail())){
+            throw new BusinessException(HttpStatus.UNAUTHORIZED, "The code is not valid for the user");
+        }
+
         codeEntity.setIsUsed(Boolean.TRUE);
         codeRepository.save(codeEntity);
 
-        UserInfoDto userInfoDto = UserInfoDto.builder().email(codeEntity.getUser().getEmail()).role(codeEntity.getUser().getRole()).build();
+        SessionEntity sessionEntity = new SessionEntity();
+        String token = authUtils.generateVerificationCode();
+        sessionEntity.setToken(token);
+        sessionEntity.setUser(codeEntity.getUser());
+        sessionEntity.setExpiredAt(authUtils.createExpirationDate(3600));
+
+        sessionService.saveOrUpdateSessionEntity(sessionEntity);
+
+
+        UserInfoDto userInfoDto = UserInfoDto.builder()
+                .email(codeEntity.getUser().getEmail())
+                .role(codeEntity.getUser().getRole())
+                .sessionToken(sessionEntity.getToken())
+                .build();
+
         return ResponseSuccessDto.builder().code(HttpStatus.ACCEPTED).message("The code is valid").body(userInfoDto).build();
 
     }
