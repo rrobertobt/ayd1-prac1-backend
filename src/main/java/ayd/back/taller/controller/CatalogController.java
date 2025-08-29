@@ -22,39 +22,39 @@ public class CatalogController implements CatalogApi {
     private final CatalogService catalogService;
 
     @Override
-    public ResponseEntity<List<PartCatalogResponseDto>> findCatalog() {
+    public ResponseEntity<List<PartCatalogResponseDto>> findCatalog(String token) {
         log.info("GET /catalog");
-        return ResponseEntity.ok(catalogService.findCatalog());
+        return ResponseEntity.ok(catalogService.findCatalog(token));
     }
 
     @Override
-    public ResponseEntity<List<PartCatalogResponseDto>> findCatalog(Integer supplierId) {
+    public ResponseEntity<List<PartCatalogResponseDto>> findCatalog(Integer supplierId, String token) {
         log.info("GET /catalog supplierId={}", supplierId);
-        return ResponseEntity.ok(catalogService.findCatalog(supplierId));
+        return ResponseEntity.ok(catalogService.findCatalog(supplierId, token));
     }
 
     @Override
-    public ResponseEntity<PartCatalogResponseDto> getCatalogItem(Integer catalogId) {
+    public ResponseEntity<PartCatalogResponseDto> getCatalogItem(Integer catalogId, String token) {
         log.info("GET /catalog catalogId={}", catalogId);
-        return ResponseEntity.ok(catalogService.getCatalogItem(catalogId));
+        return ResponseEntity.ok(catalogService.getCatalogItem(catalogId, token));
     }
 
     @Override
-    public ResponseEntity<ResponseSuccessDto> upsertCatalogEntry(PartCatalogRequestDto dto) {
+    public ResponseEntity<ResponseSuccessDto> upsertCatalogEntry(PartCatalogRequestDto dto, String token) {
         log.info("POST /catalog");
-        ResponseSuccessDto response = catalogService.upsertCatalogEntry(dto);
+        ResponseSuccessDto response = catalogService.upsertCatalogEntry(dto, token);
         return new ResponseEntity<>(response, response.getCode());
     }
 
     @Override
-    public ResponseEntity<ResponseSuccessDto> updatePrice(Integer id, Map<String, Double> body) {
-        ResponseSuccessDto response = catalogService.updateCatalogPrice(id, body.get("price"));
+    public ResponseEntity<ResponseSuccessDto> updatePrice(Integer id, Map<String, Double> body, String token) {
+        ResponseSuccessDto response = catalogService.updateCatalogPrice(id, body.get("price"), token);
         return new ResponseEntity<>(response, response.getCode());
     }
 
     @Override
-    public ResponseEntity<ResponseSuccessDto> updateStock(Integer id, Map<String, Integer> body) {
-        ResponseSuccessDto response = catalogService.updateCatalogStock(id, body.get("stock"));
+    public ResponseEntity<ResponseSuccessDto> updateStock(Integer id, Map<String, Integer> body, String token) {
+        ResponseSuccessDto response = catalogService.updateCatalogStock(id, body.get("stock"), token);
         return new ResponseEntity<>(response, response.getCode());
     }
 
