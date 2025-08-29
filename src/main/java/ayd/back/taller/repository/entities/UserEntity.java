@@ -21,7 +21,7 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Enumerated(EnumType.STRING)
+    //@Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
     private UserRoleEnum role;
 
@@ -42,7 +42,7 @@ public class UserEntity {
     @Column(name = "is_active")
     private Boolean isActive;
 
-    @Enumerated(EnumType.STRING)
+    //@Enumerated(EnumType.STRING)
     @Column(name = "twofa_method", columnDefinition = "twofa_method_t")
     private TwofaMethodEnum twofaMethod;
 

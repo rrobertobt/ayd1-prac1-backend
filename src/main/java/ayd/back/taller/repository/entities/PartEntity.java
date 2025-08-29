@@ -20,7 +20,7 @@ public class PartEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    private Integer id;
 
     private String code;
 
@@ -34,8 +34,8 @@ public class PartEntity {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @Column(name = "update_at", insertable = true, updatable = true)
+    @Column(name = "updated_at", insertable = true, updatable = true)
     @CreationTimestamp
-    private LocalDateTime updateAt;
+    private LocalDateTime updatedAt;
 
 }
