@@ -23,20 +23,22 @@ public class PartCatalogEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "supplier_id",referencedColumnName = "id")
-    private UserEntity supplierId;
+    private UserEntity supplier;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "part_id",referencedColumnName = "id")
-    private PartEntity partId;
+    private PartEntity part;
 
     private Integer stock;
+
+    private Double price;
 
     @Column(name = "created_at", insertable = true, updatable = false)
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @Column(name = "update_at", insertable = true, updatable = true)
+    @Column(name = "updated_at", insertable = true, updatable = true)
     @CreationTimestamp
-    private LocalDateTime updateAt;
+    private LocalDateTime updatedAt;
 
 }
