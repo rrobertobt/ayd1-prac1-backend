@@ -4,6 +4,8 @@ public enum PurchaseStatusEnum {
 
     BORRADOR,
     ORDENADO,
+    ENVIADO,
+    RECHAZADO,
     RECIBIDO,
     CANCELADO
 
