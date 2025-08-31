@@ -1,5 +1,8 @@
 package ayd.back.taller.controller.api;
 
+import ayd.back.taller.dto.request.CreateJobDto;
+import ayd.back.taller.dto.request.NewServiceTypeDto;
+import ayd.back.taller.dto.request.NewSpecialtiesDto;
 import ayd.back.taller.dto.request.UpdateServicePriceDto;
 import ayd.back.taller.dto.response.ResponseSuccessDto;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +23,25 @@ public interface AdminApi {
     @PostMapping("/service/price")
     ResponseEntity<ResponseSuccessDto> updateServicePrice(@RequestBody UpdateServicePriceDto updateServicePriceDto,
                                                           @RequestHeader(value = "session-token") String token);
+
+    @PostMapping("/specialties")
+    ResponseEntity<ResponseSuccessDto> createSpecialties(@RequestBody NewSpecialtiesDto newSpecialtiesDto,
+                                                         @RequestHeader(value = "session-token") String sessionToken);
+
+
+
+    @PostMapping("/job")
+    ResponseEntity<ResponseSuccessDto> createJob(@RequestBody CreateJobDto createJobDto,
+                                                 @RequestHeader(value = "session-token") String token);
+
+
+
+    @PostMapping("/service_type")
+    ResponseEntity<ResponseSuccessDto> createServiceType(@RequestBody NewServiceTypeDto newServiceTypeDto,
+                                                         @RequestHeader(value = "session-token") String token);
+
+
+
 
 
 
