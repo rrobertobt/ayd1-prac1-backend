@@ -4,6 +4,8 @@ package ayd.back.taller.dto.request;
 import ayd.back.taller.repository.enums.JobStatusEnum;
 import lombok.*;
 
+import java.time.Duration;
+
 @Setter
 @Getter
 @AllArgsConstructor
@@ -17,6 +19,13 @@ public class CreateJobDto {
 
     private JobStatusEnum jobStatus;
 
-    private Integer duration;
+    //estimated time
+    private Integer days =0;
+
+    private Integer hours =0;
+
+    private Integer minutes = 0;
+
+
 
 }

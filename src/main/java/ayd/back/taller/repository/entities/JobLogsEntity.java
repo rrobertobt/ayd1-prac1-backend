@@ -30,7 +30,7 @@ public class JobLogsEntity {
     @JoinColumn(name = "user_id",referencedColumnName = "id")
     private UserEntity user;
 
-    @Column(name = "ocurred_at")
+    @Column(name = "occurred_at")
     private LocalDateTime ocurredAt;
 
     private String description;
