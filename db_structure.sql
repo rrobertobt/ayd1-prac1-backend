@@ -140,9 +140,9 @@ CREATE TABLE jobs (
   id serial PRIMARY KEY,
   vehicle_id integer NOT NULL REFERENCES vehicles(id),
   description text,
-  status varchar(20) DEFAULT 'PENDIENTE',
+  status varchar(50) DEFAULT 'PENDIENTE',
   authorized_at timestamp,
-  estimated_time INTERVAL,
+  estimated_time varchar(100),
   created_at timestamp DEFAULT now(),
   updated_at timestamp DEFAULT now()
 );

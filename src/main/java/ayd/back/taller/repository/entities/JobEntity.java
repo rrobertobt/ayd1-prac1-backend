@@ -38,13 +38,13 @@ public class JobEntity {
     private LocalDateTime authorizedAt;
 
     @Column(name = "estimated_time")
-    private Duration estimatedTime;
+    private String estimatedTime;
 
     @Column(name = "created_at", insertable = true, updatable = false)
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @Column(name = "update_at", insertable = true, updatable = true)
+    @Column(name = "updated_at", insertable = true, updatable = true)
     @CreationTimestamp
     private LocalDateTime updateAt;
 

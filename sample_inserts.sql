@@ -255,10 +255,10 @@ WHERE id IN (1,2,3,4,5);
 INSERT INTO jobs (vehicle_id, description, status, authorized_at, estimated_time)
 VALUES
     (1, 'Cambio de aceite, filtro y revisión general de frenos', 'PENDIENTE', now(), interval '2 hours'),
-    (2, 'Diagnóstico electrónico por encendido intermitente', 'PENDIENTE', now(), interval '1 hour'),
-    (3, 'Revisión de suspensión y reemplazo de amortiguadores', 'PENDIENTE', now(), interval '4 hours'),
-    (4, 'Sustitución de bomba de agua y correa de distribución', 'PENDIENTE', now(), interval '5 hours'),
-    (5, 'Alineación, balanceo y reemplazo de pastillas de freno', 'PENDIENTE', now(), interval '3 hours');
+    (2, 'Diagnóstico electrónico por encendido intermitente', 'AUTORIZADO', now(), interval '1 hour'),
+    (3, 'Revisión de suspensión y reemplazo de amortiguadores', 'COMPLETADO', now(), interval '4 hours'),
+    (4, 'Sustitución de bomba de agua y correa de distribución', 'EN_CURSO', now(), interval '5 hours'),
+    (5, 'Alineación, balanceo y reemplazo de pastillas de freno', 'NECESITA_ESPECIALISTA', now(), interval '3 hours');
 
 -- =====================================
 -- ASIGNACIONES (job_assignments)
