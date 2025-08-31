@@ -9,10 +9,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jdk.jfr.ContentType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/user")
 public interface UserApi {
@@ -49,6 +46,10 @@ public interface UserApi {
     )
     @PostMapping("/account")
     ResponseEntity<ResponseSuccessDto> userRegistry(@RequestBody NewUserDto newUserDto);
+
+
+    @GetMapping("/all")
+    ResponseEntity<ResponseSuccessDto> getAllUsers(@RequestHeader(value = "session-token") String sessionToken);
 
 
 }

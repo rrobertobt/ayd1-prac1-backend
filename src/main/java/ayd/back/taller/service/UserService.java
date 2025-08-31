@@ -3,6 +3,7 @@ package ayd.back.taller.service;
 import ayd.back.taller.dto.request.NewUserDto;
 import ayd.back.taller.dto.response.ResponseSuccessDto;
 import ayd.back.taller.dto.response.SessionResponseDto;
+import ayd.back.taller.dto.response.UserInfoDto;
 import ayd.back.taller.exception.BusinessException;
 import ayd.back.taller.mappers.UserMapper;
 import ayd.back.taller.repository.crud.UserCrud;
@@ -12,8 +13,12 @@ import ayd.back.taller.repository.enums.UserRoleEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.web.server.header.CrossOriginEmbedderPolicyServerHttpHeadersWriter;
 import org.springframework.stereotype.Service;
+import org.w3c.dom.stylesheets.LinkStyle;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -97,6 +102,29 @@ public class UserService {
             throw new BusinessException(HttpStatus.BAD_REQUEST,"the user must not be null");
         }
         userCrud.save(user);
+    }
+
+
+    public ArrayList<UserInfoDto> getAllUsers(String token){
+        sessionService.isAdmin(token);
+
+        List<UserEntity> users = userCrud.findAll();
+        ArrayList<UserInfoDto> usersInfo = new ArrayList<>();
+
+        users.forEach(user -> {
+            UserInfoDto userInfoDto = UserInfoDto.builder()
+                    .nit(user.getNit())
+                    .name(user.getName())
+                    .address(user.getAddress())
+                    .phoneNumber(user.getPhoneNumber())
+                    .role(user.getRole())
+                    .email(user.getEmail())
+                    .build();
+
+            usersInfo.add(userInfoDto);
+        });
+
+        return usersInfo;
     }
 
 
