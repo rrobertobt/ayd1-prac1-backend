@@ -16,6 +16,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.Option;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -28,8 +30,11 @@ public class VehicleService {
     private final VehicleRepository vehicleRepository;
     private final UserService userService;
     private final VehicleMapper mapper;
+    private final SessionService sessionService;
 
-    public ResponseSuccessDto createNewVehicle(NewVehicleDto newVehicleDto){
+    public ResponseSuccessDto createNewVehicle(NewVehicleDto newVehicleDto, String token){
+
+        sessionService.validateSessionToken(token);
 
         Optional<VehicleEntity> optionalVehicleEntity = vehicleRepository.findByVinOrPlate(newVehicleDto.getVin(), newVehicleDto.getPlate());
 
@@ -60,6 +65,46 @@ public class VehicleService {
         }
 
         return ResponseSuccessDto.builder().code(HttpStatus.OK).message("The vehicle was found").body(vehicleDto).build();
+    }
+
+
+    public VehicleEntity getVehicleByPlate(String plate){
+
+        Optional<VehicleEntity> optionalVehicleEntity = vehicleRepository.findByVinOrPlate("",plate);
+
+        if(optionalVehicleEntity.isEmpty()){
+            throw new BusinessException(HttpStatus.NOT_FOUND,"The vehicle not exist");
+        }
+
+        return optionalVehicleEntity.get();
+    }
+
+    public ResponseSuccessDto getAllVehicles(){
+        ArrayList<VehicleDto> vehicles = new ArrayList<>();
+        List<VehicleEntity> vehicleEntities = vehicleRepository.findAll();
+
+        vehicleEntities.forEach(vehicleEntity -> {
+            VehicleDto vehicleDto = VehicleDto.builder().plate(vehicleEntity.getPlate()).owner(vehicleEntity.getOwner().getNit())
+                    .vin(vehicleEntity.getVin()).model(vehicleEntity.getModel()).year(vehicleEntity.getYear())
+                    .brand(vehicleEntity.getBrand()).color(vehicleEntity.getColor()).build();
+
+            vehicles.add(vehicleDto);
+        });
+
+        return ResponseSuccessDto.builder().code(HttpStatus.OK).body(vehicles).build();
+
+    }
+
+
+    public VehicleEntity getOwnerByPlate(String plate){
+        Optional<VehicleEntity> optionalVehicleEntity = vehicleRepository.findOwnerByPlate(plate);
+
+        if(optionalVehicleEntity.isEmpty()){
+            throw new BusinessException(HttpStatus.NOT_FOUND, "The vehicle with plates "+plate+", not exist");
+        }
+
+        return optionalVehicleEntity.get();
+
     }
 
 

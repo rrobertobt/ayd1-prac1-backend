@@ -10,7 +10,7 @@ public interface VehicleApi {
 
 
     @PostMapping
-    ResponseEntity<ResponseSuccessDto> createNewVehicle(@RequestBody NewVehicleDto newVehicleDto);
+    ResponseEntity<ResponseSuccessDto> createNewVehicle(@RequestBody NewVehicleDto newVehicleDto, @RequestHeader(value = "session-token") String token);
 
     @GetMapping("/{plate}")
     ResponseEntity<ResponseSuccessDto> getVehicleByOwner(@PathVariable String plate, @RequestHeader(name = "user-nit") Integer nit);

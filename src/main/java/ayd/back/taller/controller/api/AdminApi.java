@@ -1,0 +1,26 @@
+package ayd.back.taller.controller.api;
+
+import ayd.back.taller.dto.request.UpdateServicePriceDto;
+import ayd.back.taller.dto.response.ResponseSuccessDto;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RequestMapping("/admin")
+public interface AdminApi {
+
+
+    @GetMapping("/vehicles")
+    ResponseEntity<ResponseSuccessDto> getAllVehicles(@RequestHeader(value = "session-token") String token);
+
+
+    @GetMapping("/vehicle/{vehicle_plate}/owner")
+    ResponseEntity<ResponseSuccessDto> GetVehicleOwner(@RequestHeader(value = "session-token") String token,
+                                                       @PathVariable(value = "vehicle_plate") String plate);
+
+    @PostMapping("/service/price")
+    ResponseEntity<ResponseSuccessDto> updateServicePrice(@RequestBody UpdateServicePriceDto updateServicePriceDto,
+                                                          @RequestHeader(value = "session-token") String token);
+
+
+
+}
