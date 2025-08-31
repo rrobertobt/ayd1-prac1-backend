@@ -5,6 +5,7 @@ import ayd.back.taller.dto.response.SessionResponseDto;
 import ayd.back.taller.exception.BusinessException;
 import ayd.back.taller.repository.crud.SessionRepository;
 import ayd.back.taller.repository.entities.SessionEntity;
+import ayd.back.taller.repository.enums.UserRoleEnum;
 import ayd.back.taller.utils.AuthUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -67,6 +68,15 @@ public class SessionService {
                 .role(sessionEntity.getUser().getRole()).expiredAt(sessionEntity.getExpiredAt()).build();
 
         return sessionResponseDto;
+    }
+
+    public void isAdmin(String sessionToken){
+
+        SessionResponseDto sessionResponseDto = validateSessionToken(sessionToken);
+
+        if(!sessionResponseDto.getRole().equals(UserRoleEnum.ADMIN)){
+            throw new BusinessException(HttpStatus.UNAUTHORIZED,"The token does not belong to an administrator user.");
+        }
     }
 
 

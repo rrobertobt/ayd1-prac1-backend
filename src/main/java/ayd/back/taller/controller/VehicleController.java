@@ -21,9 +21,9 @@ public class VehicleController implements VehicleApi {
 
 
     @Override
-    public ResponseEntity<ResponseSuccessDto> createNewVehicle(NewVehicleDto newVehicleDto) {
+    public ResponseEntity<ResponseSuccessDto> createNewVehicle(NewVehicleDto newVehicleDto, String token) {
         log.info("POST /vehicle");
-        ResponseSuccessDto responseSuccessDto = vehicleService.createNewVehicle(newVehicleDto);
+        ResponseSuccessDto responseSuccessDto = vehicleService.createNewVehicle(newVehicleDto, token);
         return new ResponseEntity<>(responseSuccessDto, responseSuccessDto.getCode());
     }
 

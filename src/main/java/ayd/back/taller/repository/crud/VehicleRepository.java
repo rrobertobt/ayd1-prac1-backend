@@ -19,4 +19,7 @@ public interface VehicleRepository extends JpaRepository<VehicleEntity, Integer>
     @Query(value = "SELECT * FROM vehicle WHERE owner_id = ? and plate = ?;", nativeQuery = true)
     Optional<VehicleEntity> findByOwner(Integer ownerId, String plate);
 
+    @Query(value = "SELECT * FROM vehicle WHERE plate = ? ;", nativeQuery = true)
+    Optional<VehicleEntity> findOwnerByPlate(String plate);
+
 }

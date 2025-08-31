@@ -2,7 +2,7 @@ package ayd.back.taller.repository.enums;
 
 public enum JobStatusEnum {
 
-    BORRADOR,
+    BORRADO,
     PENDIENTE,
     AUTORIZADO,
     EN_ESPERA,
