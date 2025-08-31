@@ -1,25 +1,20 @@
-
-\c postgres
-DROP DATABASE IF EXISTS ayd1_prac1;
-CREATE DATABASE ayd1_prac1;
-\c ayd1_prac1
-
 -- === ENUMS ===
-CREATE TYPE user_role_t AS ENUM ('ADMIN','EMPLEADO','ESPECIALISTA','CLIENTE','PROVEEDOR');
-CREATE TYPE twofa_method_t AS ENUM ('EMAIL','SMS');
-CREATE TYPE log_type_t AS ENUM ('avance', 'diagnostico','observación','síntoma detectado', 
-  'imprevisto', 'reportar daño adicional', 'solicitud de servicio adicional', 'solicitud de especialista', 
-  'prueba tecnica', 'sugerencia', 'comentario', 'aprobacion');
-CREATE TYPE job_status_t AS ENUM ('borrador', 'pendiente', 'autorizado', 'en espera', 'en curso',
-  'necesita especialista', 'cancelado', 'completado', 'cerrado');
-CREATE TYPE task_status_t AS ENUM ('pendiente','iniciado','en progreso','completado','cancelado');
-CREATE TYPE invoice_status_t AS ENUM ('borrador','emitido', 'parcial', 'pagado', 'cancelado', 'reembolsado');
-CREATE TYPE payment_method_t AS ENUM ('efectivo','tarjeta','transferencia','otro');
-CREATE TYPE purchase_status_t AS ENUM ('borrador','ordenado','recibido','cancelado');
+--CREATE TYPE user_role_t AS ENUM ('admin','empleado','especialista','cliente','proveedor');
+--CREATE TYPE twofa_method_t AS ENUM ('email','sms');
+--CREATE TYPE log_type_t AS ENUM ('avance', 'diagnostico','observación','síntoma detectado',
+  --'imprevisto', 'reportar daño adicional', 'solicitud de servicio adicional', 'solicitud de especialista',
+  --'prueba tecnica', 'sugerencia', 'comentario', 'aprobacion');
+--CREATE TYPE job_status_t AS ENUM ('borrador', 'pendiente', 'autorizado', 'en espera', 'en curso',
+  --'necesita especialista', 'cancelado', 'completado', 'cerrado');
+--CREATE TYPE task_status_t AS ENUM ('pendiente','iniciado','en progreso','completado','cancelado');
+--CREATE TYPE invoice_status_t AS ENUM ('borrador','emitido', 'parcial', 'pagado', 'cancelado', 'reembolsado');
+--CREATE TYPE payment_method_t AS ENUM ('efectivo','tarjeta','transferencia','otro');
+--CREATE TYPE purchase_status_t AS ENUM ('borrador','ordenado','recibido','cancelado');
 
+DROP TABLE IF EXISTS users CASCADE;
 CREATE TABLE users (
   id serial PRIMARY KEY,
-  role user_role_t NOT NULL DEFAULT 'CLIENTE',
+  role varchar(20) NOT NULL DEFAULT 'CLIENTE',
   email varchar(255) UNIQUE,
   nit integer UNIQUE,
   name varchar(255) NOT NULL,
@@ -27,23 +22,25 @@ CREATE TABLE users (
   phone_number varchar(30),
   password_hash text NOT NULL,
   is_active boolean DEFAULT true,
-  twofa_method twofa_method_t DEFAULT 'EMAIL',
+  twofa_method varchar(20) DEFAULT 'EMAIL',
   created_at timestamp DEFAULT now(),
   updated_at timestamp DEFAULT now()
 );
 
 -- 2FA y códigos temporales
+DROP TABLE IF EXISTS mfa_codes CASCADE;
 CREATE TABLE mfa_codes (
   id SERIAL PRIMARY KEY,
   user_id integer NOT NULL REFERENCES users(id),
   code varchar(10) NOT NULL,
   expires_at timestamp NOT NULL,
   is_used boolean DEFAULT false,
-  twofa_method twofa_method_t NOT NULL,
+  twofa_method varchar(20) NOT NULL,
   created_at timestamp DEFAULT now()
 );
 
 -- === Vehículos ===
+DROP TABLE IF EXISTS vehicles CASCADE;
 CREATE TABLE vehicles (
   id serial PRIMARY KEY,
   owner_id integer NOT NULL REFERENCES users(id),
@@ -57,6 +54,7 @@ CREATE TABLE vehicles (
   updated_at timestamp DEFAULT now()
 );
 
+DROP TABLE IF EXISTS specialties CASCADE;
 CREATE TABLE specialties (
   id serial PRIMARY KEY,
   name varchar(300) NOT NULL UNIQUE,
@@ -65,6 +63,7 @@ CREATE TABLE specialties (
 );
 
 -- === Tipos de servicio / mantenimiento ===
+DROP TABLE IF EXISTS service_types CASCADE;
 CREATE TABLE service_types (
   id serial PRIMARY KEY,
   specialty_id integer REFERENCES specialties(id),
@@ -77,6 +76,7 @@ CREATE TABLE service_types (
 );
 
 -- especializaciones (qué servicios puede hacer cada empleado/especialista)
+DROP TABLE IF EXISTS employee_specializations CASCADE;
 CREATE TABLE employee_specializations (
   user_id integer REFERENCES users(id),
   specialty_id integer REFERENCES specialties(id),
@@ -86,6 +86,7 @@ CREATE TABLE employee_specializations (
 );
 
 -- === Inventario / repuestos ===
+DROP TABLE IF EXISTS parts CASCADE;
 CREATE TABLE parts (
   id serial PRIMARY KEY,
   code varchar(100) UNIQUE,
@@ -96,9 +97,10 @@ CREATE TABLE parts (
   updated_at timestamp DEFAULT now()
 );
 
+DROP TABLE IF EXISTS parts_catalogs CASCADE;
 CREATE TABLE parts_catalogs (
   id serial PRIMARY KEY,
-  supplier_id integer NOT NULL REFERENCES users(id),
+  supplier_id integer REFERENCES users(id),
   part_id integer NOT NULL REFERENCES parts(id),
   price numeric(12, 2),
   stock integer,
@@ -107,10 +109,11 @@ CREATE TABLE parts_catalogs (
   UNIQUE(supplier_id, part_id)
 );
 
+DROP TABLE IF EXISTS purchase_orders CASCADE;
 CREATE TABLE purchase_orders (
   id serial PRIMARY KEY,
   supplier_id integer REFERENCES users(id),
-  status purchase_status_t DEFAULT 'borrador',
+  status varchar(20) DEFAULT 'ORDENADO',
   description text,
   total numeric(14,2) DEFAULT 0,
   order_date timestamp DEFAULT now(),
@@ -119,22 +122,25 @@ CREATE TABLE purchase_orders (
   updated_at timestamp DEFAULT now()
 );
 
+
+DROP TABLE IF EXISTS purchase_order_items CASCADE;
 CREATE TABLE purchase_order_items (
   purchase_order_id integer NOT NULL REFERENCES purchase_orders(id),
   part_id serial NOT NULL REFERENCES parts(id),
   unit_price numeric(12,2) NOT NULL,
-  amount numeric(12,3) NOT NULL,
+  amount integer NOT NULL,
   created_at timestamp DEFAULT now(),
   updated_at timestamp DEFAULT now(),
   PRIMARY KEY (purchase_order_id, part_id)
 );
 
 -- === Trabajos ===
+DROP TABLE IF EXISTS jobs CASCADE;
 CREATE TABLE jobs (
   id serial PRIMARY KEY,
   vehicle_id integer NOT NULL REFERENCES vehicles(id),
   description text,
-  status job_status_t DEFAULT 'pendiente',
+  status varchar(20) DEFAULT 'PENDIENTE',
   authorized_at timestamp,
   estimated_time INTERVAL,
   created_at timestamp DEFAULT now(),
@@ -142,6 +148,7 @@ CREATE TABLE jobs (
 );
 
 -- un trabajo puede tener varios empleados/especialistas asignados
+DROP TABLE IF EXISTS job_assignments CASCADE;
 CREATE TABLE job_assignments (
   job_id integer NOT NULL REFERENCES jobs(id),
   user_id integer REFERENCES users(id),
@@ -150,26 +157,31 @@ CREATE TABLE job_assignments (
   PRIMARY KEY(job_id, user_id)
 );
 
+DROP TABLE IF EXISTS job_tasks CASCADE;
 CREATE TABLE job_tasks (
   id serial PRIMARY KEY,
   job_id integer NOT NULL REFERENCES jobs(id),
   service_id integer REFERENCES service_types(id),
-  status task_status_t DEFAULT 'pendiente',
+  status varchar(20) DEFAULT 'PENDIENTE',
   created_at timestamp DEFAULT now(),
   updated_at timestamp DEFAULT now()
 );
 
+DROP TABLE IF EXISTS job_logs CASCADE;
 CREATE TABLE job_logs (
   id serial PRIMARY KEY,
   job_id integer NOT NULL REFERENCES jobs(id),
   user_id integer REFERENCES users(id),
-  ocurred_at timestamp DEFAULT now(),
+  log_type varchar(50) DEFAULT 'OBSERVACION',
+  occurred_at timestamp DEFAULT now(),
   description text,
   created_at timestamp DEFAULT now(),
   updated_at timestamp DEFAULT now()
 );
 
+
 -- Repuestos usados en un trabajo
+DROP TABLE IF EXISTS job_parts CASCADE;
 CREATE TABLE job_parts (
   id serial PRIMARY KEY,
   job_id integer NOT NULL REFERENCES jobs(id),
@@ -181,6 +193,7 @@ CREATE TABLE job_parts (
 );
 
 -- === Facturación y pagos ===
+DROP TABLE IF EXISTS invoices CASCADE;
 CREATE TABLE invoices (
   id serial PRIMARY KEY,
   job_id integer REFERENCES jobs(id),
@@ -188,11 +201,12 @@ CREATE TABLE invoices (
   issued_by integer REFERENCES users(id),
   issued_at timestamp DEFAULT now(),
   total numeric(14,2) DEFAULT 0,
-  status invoice_status_t DEFAULT 'borrador',
+  status varchar(20) DEFAULT 'EMITIDO',
   created_at timestamp DEFAULT now(),
   updated_at timestamp DEFAULT now()
 );
 
+DROP TABLE IF EXISTS invoice_items CASCADE;
 CREATE TABLE invoice_items (
   id serial PRIMARY KEY,
   invoice_id integer NOT NULL REFERENCES invoices(id),
@@ -203,19 +217,20 @@ CREATE TABLE invoice_items (
   updated_at timestamp DEFAULT now()
 );
 
+DROP TABLE IF EXISTS payments CASCADE;
 CREATE TABLE payments (
   id serial PRIMARY KEY,
-  invoice_id integer REFERENCES invoices(id) ,
+  invoice_id integer REFERENCES invoices(id),
   amount numeric(14,2) NOT NULL,
-  method payment_method_t DEFAULT 'efectivo',
+  method varchar(20) DEFAULT 'EFECTIVO',
   paid_at timestamp DEFAULT now(),
   created_at timestamp DEFAULT now()
 );
 
-create table session(
+
+DROP TABLE IF EXISTS session CASCADE;
+CREATE TABLE session(
 	token varchar(50) primary key,
 	user_id integer not null references users(id),
 	expired_at timestamp not null
 );
--- === Datos quemados ===
--- INSERT INTO users (username, email, password_hash, role, requires_2fa, twofa_method) VALUES ('admin', 'admin@taller.mec', 'hash_admin', 'admin', true, 'email');

@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -15,17 +16,17 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "purchase_orders_items")
-public class PurchaseOrdersItemsEntity {
+@Table(name = "purchase_order_items")
+public class PurchaseOrderItemEntity {
 
 
     @EmbeddedId
-    private PurchaseOrdersItemsId id;
+    private PurchaseOrderItemId id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "purchase_order_id")
     @MapsId("purchaseOrderId")
-    private PurchaseOrdersEntity purchaseOrders;
+    private PurchaseOrderEntity purchaseOrder;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "part_id")
@@ -35,14 +36,14 @@ public class PurchaseOrdersItemsEntity {
     @Column(name = "unit_price")
     private Double unitPrice;
 
-    private Double amount;
+    private Integer amount;
 
     @Column(name = "created_at", insertable = true, updatable = false)
     @CreationTimestamp
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at", insertable = true, updatable = true)
-    @CreationTimestamp
-    private LocalDateTime updateAt;
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 
 }
