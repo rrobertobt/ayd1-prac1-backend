@@ -20,11 +20,7 @@ public class CreateJobDto {
     private JobStatusEnum jobStatus;
 
     //estimated time
-    private Integer days =0;
-
-    private Integer hours =0;
-
-    private Integer minutes = 0;
+    private Integer estimatedTime;
 
 
 

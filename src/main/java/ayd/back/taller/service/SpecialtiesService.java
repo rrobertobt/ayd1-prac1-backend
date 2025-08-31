@@ -2,6 +2,7 @@ package ayd.back.taller.service;
 
 import ayd.back.taller.dto.response.ResponseSuccessDto;
 import ayd.back.taller.dto.response.SpecialtiesDto;
+import ayd.back.taller.exception.BusinessException;
 import ayd.back.taller.repository.crud.SpecialtiesRepository;
 import ayd.back.taller.repository.entities.SpecialtiesEntity;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Slf4j
@@ -42,6 +44,18 @@ public class SpecialtiesService {
         });
 
         return ResponseSuccessDto.builder().code(HttpStatus.OK).body(specialtiesDtos).build();
+    }
+
+
+    public SpecialtiesEntity getSpecialtiesForId(Integer id){
+        Optional<SpecialtiesEntity> optionalSpecialtiesEntity = specialtiesRepository.findById(id);
+
+        if(optionalSpecialtiesEntity.isEmpty()){
+            throw new BusinessException(HttpStatus.NOT_FOUND, "The specialties not exist");
+        }
+
+        return optionalSpecialtiesEntity.get();
+
     }
 
 }

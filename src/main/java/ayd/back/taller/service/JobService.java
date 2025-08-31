@@ -32,9 +32,8 @@ public class JobService {
         sessionService.isAdmin(token);
 
         VehicleEntity vehicle = vehicleService.getOwnerByPlate(createJobDto.getPlate());
-        Duration estimatedTime = Duration.ofDays(createJobDto.getDays()).ofHours(createJobDto.getHours()).ofMinutes(createJobDto.getMinutes());
 
-        JobEntity jobEntity = new JobEntity(vehicle,createJobDto.getDescription(), createJobDto.getJobStatus(),null,estimatedTime, LocalDateTime.now(),null);
+        JobEntity jobEntity = new JobEntity(vehicle,createJobDto.getDescription(), createJobDto.getJobStatus(),null,createJobDto.getEstimatedTime(), LocalDateTime.now(),null);
 
         try{
             jobRepository.save(jobEntity);

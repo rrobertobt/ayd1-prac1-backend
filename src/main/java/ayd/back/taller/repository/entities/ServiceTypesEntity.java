@@ -33,7 +33,7 @@ public class ServiceTypesEntity {
     private Double price;
 
     @Column(name = "estimated_time")
-    private Duration estimatedTime;
+    private Integer estimatedTime;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;

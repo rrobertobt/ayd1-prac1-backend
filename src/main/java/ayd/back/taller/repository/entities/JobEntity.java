@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 @Table(name = "jobs")
 public class JobEntity {
 
-    public JobEntity(VehicleEntity vehicle, String description, JobStatusEnum status, LocalDateTime authorizedAt, Duration estimatedTime, LocalDateTime createdAt, LocalDateTime updateAt) {
+    public JobEntity(VehicleEntity vehicle, String description, JobStatusEnum status, LocalDateTime authorizedAt, Integer estimatedTime, LocalDateTime createdAt, LocalDateTime updateAt) {
         this.vehicle = vehicle;
         this.description = description;
         this.status = status;
@@ -48,7 +48,7 @@ public class JobEntity {
     private LocalDateTime authorizedAt;
 
     @Column(name = "estimated_time")
-    private Duration estimatedTime;
+    private Integer estimatedTime;
 
     @Column(name = "created_at", insertable = true, updatable = false)
     @CreationTimestamp
