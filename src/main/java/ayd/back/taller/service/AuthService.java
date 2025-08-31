@@ -122,6 +122,10 @@ public class AuthService {
 
 
         UserInfoDto userInfoDto = UserInfoDto.builder()
+                .name(codeEntity.getUser().getName())
+                .nit(codeEntity.getUser().getNit())
+                .address(codeEntity.getUser().getAddress())
+                .phoneNumber(codeEntity.getUser().getPhoneNumber())
                 .email(codeEntity.getUser().getEmail())
                 .role(codeEntity.getUser().getRole())
                 .sessionToken(sessionEntity.getToken())
