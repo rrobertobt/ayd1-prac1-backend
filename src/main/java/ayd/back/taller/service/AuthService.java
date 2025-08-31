@@ -10,19 +10,12 @@ import ayd.back.taller.repository.crud.CodeRepository;
 import ayd.back.taller.repository.entities.CodeEntity;
 import ayd.back.taller.repository.entities.SessionEntity;
 import ayd.back.taller.repository.entities.UserEntity;
-import ayd.back.taller.repository.enums.UserRoleEnum;
 import ayd.back.taller.utils.AuthUtils;
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.security.web.authentication.password.HaveIBeenPwnedRestApiPasswordChecker;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Optional;
@@ -74,7 +67,7 @@ public class AuthService {
             codeEntity = optionalCodeEntity.get();
         }else{
             codeEntity.setUser(user);
-            codeEntity.setTwofaMethod(user.getTwofaMethod().name());
+            codeEntity.setTwofaMethod(user.getTwofaMethod());
         }
 
         codeEntity.setCode(code);

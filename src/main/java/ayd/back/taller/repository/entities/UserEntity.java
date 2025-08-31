@@ -1,9 +1,10 @@
 package ayd.back.taller.repository.entities;
 
 
-import ayd.back.taller.mappers.ConverterEnumColumn;
 import ayd.back.taller.repository.enums.TwofaMethodEnum;
 import ayd.back.taller.repository.enums.UserRoleEnum;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,8 +22,9 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    //@Enumerated(EnumType.STRING)
-    @Column(name = "role", nullable = false)
+    @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(name = "role", nullable = false, columnDefinition = "user_role_t")
     private UserRoleEnum role;
 
     private String email;
@@ -42,7 +44,8 @@ public class UserEntity {
     @Column(name = "is_active")
     private Boolean isActive;
 
-    //@Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Column(name = "twofa_method", columnDefinition = "twofa_method_t")
     private TwofaMethodEnum twofaMethod;
 
