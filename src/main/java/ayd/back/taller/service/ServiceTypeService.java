@@ -24,4 +24,8 @@ public class ServiceTypeService {
         }
     }
 
+    public void createServiceType(){
+
+    }
+
 }
