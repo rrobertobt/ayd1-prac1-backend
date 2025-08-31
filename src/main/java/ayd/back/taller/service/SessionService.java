@@ -6,15 +6,11 @@ import ayd.back.taller.exception.BusinessException;
 import ayd.back.taller.repository.crud.SessionRepository;
 import ayd.back.taller.repository.entities.SessionEntity;
 import ayd.back.taller.repository.enums.UserRoleEnum;
-import ayd.back.taller.utils.AuthUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.graphql.GraphQlProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
-import java.nio.charset.StandardCharsets;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
@@ -64,8 +60,15 @@ public class SessionService {
             throw new BusinessException(HttpStatus.UNAUTHORIZED,"The tokes has been expired");
         }
 
-        SessionResponseDto sessionResponseDto = SessionResponseDto.builder().userEmail(sessionEntity.getUser().getEmail())
-                .role(sessionEntity.getUser().getRole()).expiredAt(sessionEntity.getExpiredAt()).build();
+        SessionResponseDto sessionResponseDto = SessionResponseDto.builder()
+                .email(sessionEntity.getUser().getEmail())
+                .role(sessionEntity.getUser().getRole()).expiredAt(sessionEntity.getExpiredAt())
+                .nit(sessionEntity.getUser().getNit())
+                .address(sessionEntity.getUser().getAddress())
+                .name(sessionEntity.getUser().getName())
+                .phoneNumber(sessionEntity.getUser().getPhoneNumber())
+                .expiredAt(sessionEntity.getExpiredAt())
+                .build();
 
         return sessionResponseDto;
     }

@@ -12,7 +12,15 @@ import java.util.Date;
 @Builder
 public class SessionResponseDto {
 
-    private String userEmail;
+    private String email;
+
+    private Integer nit;
+
+    private String name;
+
+    private String address;
+
+    private String phoneNumber;
 
     private UserRoleEnum role;
 

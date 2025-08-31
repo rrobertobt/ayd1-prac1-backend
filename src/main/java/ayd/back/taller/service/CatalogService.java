@@ -20,8 +20,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -73,7 +71,7 @@ public class CatalogService {
             UserEntity supplier = userRepository.findById(dto.getSupplierId())
                     .orElseThrow(() -> new BusinessException(HttpStatus.NOT_FOUND, "Supplier not found: " + dto.getSupplierId()));
 
-            if (!supplier.getEmail().equals(sessionDto.getUserEmail())) {
+            if (!supplier.getEmail().equals(sessionDto.getEmail())) {
                 throw new BusinessException(HttpStatus.FORBIDDEN, "User does not have the necessary permissions");
             }
         }
@@ -120,7 +118,7 @@ public class CatalogService {
         SessionResponseDto sessionDto = sessionService.validateSessionToken(token);
         UserEntity supplier = entity.getSupplier();
         if (supplier != null){
-            if (!(supplier.getEmail() == sessionDto.getUserEmail())){
+            if (!(supplier.getEmail() == sessionDto.getEmail())){
                 throw new BusinessException(HttpStatus.FORBIDDEN,"User does not have the necessary permissions");
             }
         } else {
@@ -153,7 +151,7 @@ public class CatalogService {
         SessionResponseDto sessionDto = sessionService.validateSessionToken(token);
         UserEntity supplier = entity.getSupplier();
         if (supplier != null){
-            if (!(supplier.getEmail() == sessionDto.getUserEmail())){
+            if (!(supplier.getEmail() == sessionDto.getEmail())){
                 throw new BusinessException(HttpStatus.FORBIDDEN,"User does not have the necessary permissions");
             }
         } else {
