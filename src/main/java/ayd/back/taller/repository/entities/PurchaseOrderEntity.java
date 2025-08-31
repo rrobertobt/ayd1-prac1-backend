@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -16,7 +17,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Entity
 @Table(name = "purchase_orders")
-public class PurchaseOrdersEntity {
+public class PurchaseOrderEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +28,7 @@ public class PurchaseOrdersEntity {
     private UserEntity supplier;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", columnDefinition = "purchase_status_t")
+    @Column(name = "status")
     private PurchaseStatusEnum status;
 
     private String description;
@@ -45,4 +46,7 @@ public class PurchaseOrdersEntity {
     private LocalDateTime createdAt;
 
 
+    @Column(name = "updated_at",insertable = true, updatable = true)
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 }

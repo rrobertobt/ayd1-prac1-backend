@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -15,5 +16,8 @@ public interface UserCrud extends JpaRepository<UserEntity, Integer> {
 
     @Query(value = "SELECT * FROM users WHERE nit = ?;", nativeQuery = true)
     Optional<UserEntity> getUserByNit(Integer nit);
+
+    @Query(value = "SELECT * FROM users WHERE role = ?;", nativeQuery = true)
+    List<UserEntity> findByRole(String role);
 
 }
