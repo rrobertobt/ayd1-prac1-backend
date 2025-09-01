@@ -9,6 +9,8 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -50,4 +52,8 @@ public class InvoiceEntity {
 
     @Column(name = "updated_at", insertable = true, updatable = true)
     private LocalDateTime updatedAt;
+
+    @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<InvoiceItemEntity> items = new ArrayList<>();
+
 }

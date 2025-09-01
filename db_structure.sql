@@ -197,7 +197,7 @@ CREATE TABLE invoice_items (
   invoice_id integer NOT NULL REFERENCES invoices(id),
   description text,
   unit_price numeric(12,2) DEFAULT 0,
-  amount numeric(12,3) DEFAULT 1,
+  amount integer DEFAULT 1,
   created_at timestamp DEFAULT now(),
   updated_at timestamp DEFAULT now()
 );

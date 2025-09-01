@@ -30,7 +30,7 @@ public class InvoiceItemEntity {
     @Column(name = "unit_price")
     private Double unitPrice;
 
-    private Double amount;
+    private Integer amount;
 
     @Column(name = "created_at", insertable = true, updatable = false)
     @CreationTimestamp
