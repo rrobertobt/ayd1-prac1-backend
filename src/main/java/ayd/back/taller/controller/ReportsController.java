@@ -2,13 +2,12 @@ package ayd.back.taller.controller;
 
 import ayd.back.taller.controller.api.ReportsApi;
 import ayd.back.taller.dto.request.reports.ClientJobHistoryRequestDto;
-import ayd.back.taller.dto.response.reports.ClientRatingResponseDto;
+import ayd.back.taller.dto.request.reports.IncomeExpenseReportRequestDto;
+import ayd.back.taller.dto.response.reports.*;
 import ayd.back.taller.dto.request.reports.JobReportRequestDto;
 import ayd.back.taller.dto.request.reports.PartsUsageReportRequestDto;
-import ayd.back.taller.dto.response.reports.ClientJobHistoryResponseDto;
-import ayd.back.taller.dto.response.reports.JobReportResponseDto;
-import ayd.back.taller.dto.response.reports.PartsUsageReportResponseDto;
-import ayd.back.taller.service.ClientReportsService;
+import ayd.back.taller.service.reports.ClientReportsService;
+import ayd.back.taller.service.reports.FinancialReportsService;
 import ayd.back.taller.service.reports.JobReportsService;
 import ayd.back.taller.service.reports.PartsUsageReportService;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +25,7 @@ public class ReportsController implements ReportsApi {
     private final JobReportsService jobReportsService;
     private final PartsUsageReportService partsUsageReportService;
     private final ClientReportsService clientReportsService;
+    private final FinancialReportsService financialReportsService;
 
     @Override
     public ResponseEntity<List<JobReportResponseDto>> jobsReport( String token, JobReportRequestDto filters) {
@@ -50,8 +50,16 @@ public class ReportsController implements ReportsApi {
 
     @Override
     public ResponseEntity<List<ClientRatingResponseDto>> getUserRatings(String token, Integer userId) {
+        log.info("GET /reports/client-rating");
         List<ClientRatingResponseDto> ratings = clientReportsService.getUserRatings(token, userId);
         return ResponseEntity.ok(ratings);
+    }
+
+    @Override
+    public ResponseEntity<IncomeExpenseReportResponseDto> cashFlowReport(String token, IncomeExpenseReportRequestDto dto) {
+        log.info("GET /reports/cashflow");
+        var resp = financialReportsService.generateCashflowReport(token, dto);
+        return ResponseEntity.ok(resp);
     }
 
 

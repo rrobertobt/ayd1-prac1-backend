@@ -1,4 +1,4 @@
-package ayd.back.taller.service;
+package ayd.back.taller.service.reports;
 
 import ayd.back.taller.dto.request.reports.ClientJobHistoryRequestDto;
 import ayd.back.taller.dto.response.reports.ClientRatingResponseDto;
@@ -12,6 +12,7 @@ import ayd.back.taller.repository.entities.UserEntity;
 import ayd.back.taller.repository.crud.JobRepository;
 import ayd.back.taller.repository.crud.UserCrud;
 import ayd.back.taller.repository.enums.LogTypeEnum;
+import ayd.back.taller.service.SessionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;

@@ -1,12 +1,10 @@
 package ayd.back.taller.controller.api;
 
 import ayd.back.taller.dto.request.reports.ClientJobHistoryRequestDto;
-import ayd.back.taller.dto.response.reports.ClientRatingResponseDto;
+import ayd.back.taller.dto.request.reports.IncomeExpenseReportRequestDto;
+import ayd.back.taller.dto.response.reports.*;
 import ayd.back.taller.dto.request.reports.JobReportRequestDto;
 import ayd.back.taller.dto.request.reports.PartsUsageReportRequestDto;
-import ayd.back.taller.dto.response.reports.ClientJobHistoryResponseDto;
-import ayd.back.taller.dto.response.reports.JobReportResponseDto;
-import ayd.back.taller.dto.response.reports.PartsUsageReportResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -93,5 +91,22 @@ public interface ReportsApi {
     ResponseEntity<List<ClientRatingResponseDto>> getUserRatings(
             @RequestHeader("session-token") String token,
             @Parameter(description = "ID del cliente") @RequestParam(value = "userId", required = true) Integer userId
+    );
+
+
+    @Operation(summary = "Reporte de ingresos/egresos",
+            description = "Genera un reporte de ingresos (payments) y/o egresos (purchase_orders) en un periodo. " +
+                    "Si no se proveen fechas, el reporte considerará todos los registros.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Reporte generado correctamente"),
+            @ApiResponse(responseCode = "400", description = "Solicitud inválida (fechas o parámetros)"),
+            @ApiResponse(responseCode = "401", description = "No autorizado (token inválido)"),
+            @ApiResponse(responseCode = "403", description = "Prohibido: usuario no tiene permisos para este reporte"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
+    @GetMapping("/cashflow")
+    ResponseEntity<IncomeExpenseReportResponseDto> cashFlowReport(
+            @RequestHeader("session-token") String token,
+            @ParameterObject IncomeExpenseReportRequestDto dto
     );
 }
