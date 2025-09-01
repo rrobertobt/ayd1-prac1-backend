@@ -39,7 +39,7 @@ public class JobTaskEntity {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @Column(name = "update_at", insertable = true, updatable = true)
+    @Column(name = "updated_at", insertable = true, updatable = true)
     private LocalDateTime updateAt;
 
 }
