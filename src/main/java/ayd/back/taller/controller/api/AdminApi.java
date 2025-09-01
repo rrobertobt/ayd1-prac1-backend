@@ -2,6 +2,7 @@ package ayd.back.taller.controller.api;
 
 import ayd.back.taller.dto.request.*;
 import ayd.back.taller.dto.response.ResponseSuccessDto;
+import ayd.back.taller.repository.entities.JobAssignmentsId;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -47,5 +48,9 @@ public interface AdminApi {
     @PostMapping("/job/cancel")
     ResponseEntity<ResponseSuccessDto> cancelJob(@RequestBody CancelJobDto cancelJobDto,
                                                  @RequestHeader(value = "session-token") String token);
+
+    ResponseEntity<ResponseSuccessDto>  assignmentJob(@RequestHeader JobAssignmentDto jobAssignmentDto,
+                                                      @RequestHeader(value = "session-token") String token);
+
 
 }
