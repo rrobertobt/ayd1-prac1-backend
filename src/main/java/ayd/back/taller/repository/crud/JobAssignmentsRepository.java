@@ -21,4 +21,7 @@ public interface JobAssignmentsRepository extends JpaRepository<JobAssignmentsEn
     @Query(value = "update job_assignments set user_id  = ? where user_id = ? and job_id = ?;", nativeQuery = true)
     void updateJobAssignment(Integer newUserId, Integer actualUserId, Integer jobId);
 
+    @Query("SELECT j FROM JobEntity j JOIN j.assignments a WHERE a.user.id = :userId")
+    List<JobEntity> findJobsByUserId(Integer userId);
+
 }

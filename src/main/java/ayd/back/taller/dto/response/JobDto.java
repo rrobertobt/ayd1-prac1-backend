@@ -23,3 +23,4 @@ public class JobDto {
 
     private String status;
 }
+
