@@ -38,4 +38,6 @@ public interface JobRepository extends JpaRepository<JobEntity,Integer> {
     """)
     List<JobEntity> findByClientId(Integer clientId);
 
+    @Query("SELECT j FROM JobEntity j WHERE j.vehicle.owner.id = :ownerId")
+    List<JobEntity> findByVehicleOwnerId(Integer ownerId);
 }

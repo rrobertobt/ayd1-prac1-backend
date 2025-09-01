@@ -6,10 +6,12 @@ import ayd.back.taller.dto.response.JobDto;
 import ayd.back.taller.exception.BusinessException;
 import ayd.back.taller.repository.crud.JobRepository;
 import ayd.back.taller.repository.crud.JobAssignmentsRepository;
+import ayd.back.taller.repository.crud.UserCrud;
 import ayd.back.taller.repository.entities.JobAssignmentsEntity;
 import ayd.back.taller.repository.entities.JobEntity;
 import ayd.back.taller.repository.entities.UserEntity;
 import ayd.back.taller.repository.entities.VehicleEntity;
+import ayd.back.taller.repository.enums.UserRoleEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -19,6 +21,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -31,8 +34,39 @@ public class JobService {
 
     private final VehicleService vehicleService;
     private final JobAssignmentsRepository jobAssignmentsRepo;
-
+    private final UserCrud userRepo;
     private final SessionService sessionService;
+
+
+    public List<JobDto> getJobsForUser(String token) {
+        var session = sessionService.validateSessionToken(token);
+        UserEntity user = userRepo.getUserByEmail(session.getEmail())
+                .orElseThrow(() -> new BusinessException(HttpStatus.NOT_FOUND, "Usuario no encontrado"));
+
+        List<JobEntity> jobs = new ArrayList<>();
+
+        switch (user.getRole()) {
+            case UserRoleEnum.ADMIN:
+                jobs = jobRepository.findAll();
+                break;
+
+            case UserRoleEnum.EMPLEADO:
+            case UserRoleEnum.ESPECIALISTA:
+                jobs = jobAssignmentsRepo.findJobsByUserId(user.getId());
+                break;
+
+            case UserRoleEnum.CLIENTE:
+                jobs = jobRepository.findByVehicleOwnerId(user.getId());
+                break;
+
+            default:
+                throw new BusinessException(HttpStatus.FORBIDDEN, "Rol de usuario no permitido");
+        }
+        return jobs
+                .stream()
+                .map(this::fromEntity)
+                .collect(Collectors.toList());
+    }
 
 
     public void createNewJob(CreateJobDto createJobDto, String token){
@@ -109,4 +143,12 @@ public class JobService {
         return optionalJobEntity.get();
     }
 
+    private JobDto fromEntity(JobEntity job) {
+        return JobDto.builder()
+                .id(job.getId())
+                .description(job.getDescription())
+                .status(job.getStatus().name())
+                .vehiclePlate(job.getVehicle().getPlate())
+                .build();
+    }
 }
