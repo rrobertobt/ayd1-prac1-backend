@@ -39,7 +39,7 @@ public class VehicleEntity {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @Column(name = "update_at")
+    @Column(name = "updated_at")
     private LocalDateTime updateAt;
 
 }
