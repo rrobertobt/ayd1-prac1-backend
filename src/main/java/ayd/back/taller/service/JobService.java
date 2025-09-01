@@ -1,6 +1,7 @@
 package ayd.back.taller.service;
 
 import ayd.back.taller.dto.request.CreateJobDto;
+import ayd.back.taller.dto.request.jobs.UpdateJobStatusDto;
 import ayd.back.taller.dto.response.JobDto;
 import ayd.back.taller.exception.BusinessException;
 import ayd.back.taller.repository.crud.JobRepository;
@@ -82,6 +83,16 @@ public class JobService {
         }
         if (!userAssigned) {
             throw new BusinessException(HttpStatus.FORBIDDEN, "User does not have the necessary permissions");
+        }
+    }
+
+
+    public void updateJobStatus(UpdateJobStatusDto updateJobStatusDto){
+
+        try{
+            jobRepository.updateJobStatus(updateJobStatusDto.getStatus(), updateJobStatusDto.getJobId());
+        }catch (Exception exception){
+            throw new BusinessException(HttpStatus.BAD_REQUEST,"The job has not been update");
         }
     }
 

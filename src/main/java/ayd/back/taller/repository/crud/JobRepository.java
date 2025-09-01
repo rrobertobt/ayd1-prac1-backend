@@ -17,7 +17,6 @@ public interface JobRepository extends JpaRepository<JobEntity,Integer> {
     @Query(value = "select * from jobs where status = ?;", nativeQuery = true)
     List<JobEntity> getAllJobsByStatus(String status);
 
-
     @Transactional
     @Modifying
     @Query(value = "update jobs set status = 'CANCELADO' where id = ?;", nativeQuery = true)
@@ -25,4 +24,10 @@ public interface JobRepository extends JpaRepository<JobEntity,Integer> {
 
     @Query(value = "SELECT * FROM jobs WHERE id = ?;", nativeQuery = true)
     Optional<JobEntity> findById(Integer id);
+
+
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE jobs SET status = ? WHERE id = ? ;", nativeQuery = true)
+    void updateJobStatus(String status, Integer jobId);
 }

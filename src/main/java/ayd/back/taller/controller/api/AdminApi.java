@@ -1,6 +1,7 @@
 package ayd.back.taller.controller.api;
 
 import ayd.back.taller.dto.request.*;
+import ayd.back.taller.dto.request.jobs.UpdateJobStatusDto;
 import ayd.back.taller.dto.response.ResponseSuccessDto;
 import ayd.back.taller.repository.entities.JobAssignmentsId;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
@@ -27,8 +28,6 @@ public interface AdminApi {
     ResponseEntity<ResponseSuccessDto> createSpecialties(@RequestBody NewSpecialtiesDto newSpecialtiesDto,
                                                          @RequestHeader(value = "session-token") String sessionToken);
 
-
-
     @PostMapping("/job")
     ResponseEntity<ResponseSuccessDto> createJob(@RequestBody CreateJobDto createJobDto,
                                                  @RequestHeader(value = "session-token") String token);
@@ -51,6 +50,10 @@ public interface AdminApi {
 
     ResponseEntity<ResponseSuccessDto>  assignmentJob(@RequestHeader JobAssignmentDto jobAssignmentDto,
                                                       @RequestHeader(value = "session-token") String token);
+
+    @PutMapping("/job/status")
+    ResponseEntity<ResponseSuccessDto> updateJobStatus(@RequestBody UpdateJobStatusDto updateJobStatusDto,
+                                                       @RequestHeader(value = "session-token") String token);
 
 
 }

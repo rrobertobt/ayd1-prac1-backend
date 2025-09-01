@@ -2,6 +2,7 @@ package ayd.back.taller.controller;
 
 import ayd.back.taller.controller.api.AdminApi;
 import ayd.back.taller.dto.request.*;
+import ayd.back.taller.dto.request.jobs.UpdateJobStatusDto;
 import ayd.back.taller.dto.response.JobDto;
 import ayd.back.taller.dto.response.ResponseSuccessDto;
 import ayd.back.taller.service.*;
@@ -86,6 +87,7 @@ public class AdminController implements AdminApi {
 
     @Override
     public ResponseEntity<ResponseSuccessDto> cancelJob(CancelJobDto cancelJobDto, String token) {
+        log.info("POST admin/job/cancel");
         sessionService.isAdmin(token);
         jobService.cancelJob(cancelJobDto.getJobId());
         ResponseSuccessDto responseSuccessDto = ResponseSuccessDto.builder().code(HttpStatus.OK).message("The job was canceled").build();
@@ -94,7 +96,16 @@ public class AdminController implements AdminApi {
 
     @Override
     public ResponseEntity<ResponseSuccessDto> assignmentJob(JobAssignmentDto jobAssignmentDto, String token) {
-        //TODO hacer el servicio
+
         return null;
+    }
+
+    @Override
+    public ResponseEntity<ResponseSuccessDto> updateJobStatus(UpdateJobStatusDto updateJobStatusDto, String token) {
+        log.info("PUT admin/job/status");
+        sessionService.isAdmin(token);
+        jobService.updateJobStatus(updateJobStatusDto);
+        ResponseSuccessDto responseSuccessDto = ResponseSuccessDto.builder().code(HttpStatus.OK).message("The job was updated successfully").build();
+        return new ResponseEntity<>(responseSuccessDto,responseSuccessDto.getCode());
     }
 }

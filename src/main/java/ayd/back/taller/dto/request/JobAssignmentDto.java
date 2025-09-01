@@ -9,9 +9,9 @@ import lombok.Setter;
 @Builder
 public class JobAssignmentDto {
 
-    private String jobId;
+    private Integer jobId;
 
-    private String userId;
+    private Integer userId;
 
 
 
