@@ -1,5 +1,6 @@
 package ayd.back.taller.repository.entities;
 
+import ayd.back.taller.repository.enums.LogTypeEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,8 +31,12 @@ public class JobLogsEntity {
     @JoinColumn(name = "user_id",referencedColumnName = "id")
     private UserEntity user;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "log_type")
+    private LogTypeEnum logType;
+
     @Column(name = "occurred_at")
-    private LocalDateTime ocurredAt;
+    private LocalDateTime occurredAt;
 
     private String description;
 

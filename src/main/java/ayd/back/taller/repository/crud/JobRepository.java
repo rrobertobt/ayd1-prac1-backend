@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import java.util.Optional;
+
 @Repository
 public interface JobRepository extends JpaRepository<JobEntity,Integer> {
 
@@ -21,4 +23,6 @@ public interface JobRepository extends JpaRepository<JobEntity,Integer> {
     @Query(value = "update jobs set status = 'CANCELADO' where id = ?;", nativeQuery = true)
     void cancelJob(String jobId);
 
+    @Query(value = "SELECT * FROM jobs WHERE id = ?;", nativeQuery = true)
+    Optional<JobEntity> findById(Integer id);
 }
