@@ -8,8 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
-import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -38,7 +36,7 @@ public class JobEntity {
     private LocalDateTime authorizedAt;
 
     @Column(name = "estimated_time")
-    private String estimatedTime;
+    private Integer estimatedTime;
 
     @Column(name = "created_at", insertable = true, updatable = false)
     @CreationTimestamp

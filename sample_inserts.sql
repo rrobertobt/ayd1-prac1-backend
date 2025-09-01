@@ -95,22 +95,22 @@ INSERT INTO employee_specializations (user_id, specialty_id) VALUES
     (4, 8); -- Empleado 4: Pintura
 
 INSERT INTO service_types (specialty_id, name, description, price, estimated_time) VALUES
-    (1, 'Revisión de transmisión', 'Inspección y ajuste de transmisión', 500.00, '2 hours'),
-    (1, 'Cambio de aceite de transmisión', 'Reemplazo de fluido de transmisión', 800.00, '3 hours'),
-    (2, 'Revisión de frenos', 'Inspección de pastillas y discos', 300.00, '1 hour'),
-    (2, 'Cambio de pastillas de freno', 'Sustitución de pastillas de freno', 600.00, '2 hours'),
-    (3, 'Diagnóstico de motor', 'Revisión general de motor con escáner', 400.00, '1 hour'),
-    (3, 'Sustitución de piezas de motor', 'Cambio de piezas dañadas en el motor', 1500.00, '5 hours'),
-    (4, 'Revisión de dirección', 'Inspección de sistema de dirección', 350.00, '1 hour'),
-    (4, 'Alineación de dirección', 'Alineación completa de ruedas', 700.00, '2 hours'),
-    (5, 'Revisión de suspensión', 'Chequeo de amortiguadores y resortes', 300.00, '1 hour'),
-    (5, 'Cambio de amortiguadores', 'Reemplazo de amortiguadores', 1200.00, '4 hours'),
-    (6, 'Diagnóstico electrónico', 'Chequeo de sensores y computadora del vehículo', 450.00, '1 hour'),
-    (6, 'Reparación de cableado', 'Reemplazo y reparación de conexiones eléctricas', 900.00, '3 hours'),
-    (7, 'Montaje de llantas', 'Instalación de nuevas llantas', 200.00, '30 minutes'),
-    (7, 'Balanceo de llantas', 'Balanceo de ruedas para estabilidad', 250.00, '45 minutes'),
-    (8, 'Pintura general', 'Pintura completa del vehículo', 4000.00, '3 days'),
-    (8, 'Retoque de pintura', 'Reparación de rayones y pequeños daños', 800.00, '6 hours');
+    (1, 'Revisión de transmisión', 'Inspección y ajuste de transmisión', 500.00, 2 ),
+    (1, 'Cambio de aceite de transmisión', 'Reemplazo de fluido de transmisión', 800.00, 3),
+    (2, 'Revisión de frenos', 'Inspección de pastillas y discos', 300.00, 1),
+    (2, 'Cambio de pastillas de freno', 'Sustitución de pastillas de freno', 600.00, 2),
+    (3, 'Diagnóstico de motor', 'Revisión general de motor con escáner', 400.00, 1),
+    (3, 'Sustitución de piezas de motor', 'Cambio de piezas dañadas en el motor', 1500.00, 5),
+    (4, 'Revisión de dirección', 'Inspección de sistema de dirección', 350.00, 1),
+    (4, 'Alineación de dirección', 'Alineación completa de ruedas', 700.00, 2),
+    (5, 'Revisión de suspensión', 'Chequeo de amortiguadores y resortes', 300.00, 1),
+    (5, 'Cambio de amortiguadores', 'Reemplazo de amortiguadores', 1200.00, 4),
+    (6, 'Diagnóstico electrónico', 'Chequeo de sensores y computadora del vehículo', 450.00, 1),
+    (6, 'Reparación de cableado', 'Reemplazo y reparación de conexiones eléctricas', 900.00, 3),
+    (7, 'Montaje de llantas', 'Instalación de nuevas llantas', 200.00, 1),
+    (7, 'Balanceo de llantas', 'Balanceo de ruedas para estabilidad', 250.00, 1),
+    (8, 'Pintura general', 'Pintura completa del vehículo', 4000.00, 72),
+    (8, 'Retoque de pintura', 'Reparación de rayones y pequeños daños', 800.00, 6);
 
 
 -- ==========================
@@ -254,11 +254,11 @@ WHERE id IN (1,2,3,4,5);
 -- =====================================
 INSERT INTO jobs (vehicle_id, description, status, authorized_at, estimated_time)
 VALUES
-    (1, 'Cambio de aceite, filtro y revisión general de frenos', 'PENDIENTE', now(), interval '2 hours'),
-    (2, 'Diagnóstico electrónico por encendido intermitente', 'AUTORIZADO', now(), interval '1 hour'),
-    (3, 'Revisión de suspensión y reemplazo de amortiguadores', 'COMPLETADO', now(), interval '4 hours'),
-    (4, 'Sustitución de bomba de agua y correa de distribución', 'EN_CURSO', now(), interval '5 hours'),
-    (5, 'Alineación, balanceo y reemplazo de pastillas de freno', 'NECESITA_ESPECIALISTA', now(), interval '3 hours');
+    (1, 'Cambio de aceite, filtro y revisión general de frenos', 'PENDIENTE', now(), 2),
+    (2, 'Diagnóstico electrónico por encendido intermitente', 'AUTORIZADO', now(), 1),
+    (3, 'Revisión de suspensión y reemplazo de amortiguadores', 'COMPLETADO', now(), 4),
+    (4, 'Sustitución de bomba de agua y correa de distribución', 'EN_CURSO', now(), 5),
+    (5, 'Alineación, balanceo y reemplazo de pastillas de freno', 'NECESITA_ESPECIALISTA', now(), 3);
 
 -- =====================================
 -- ASIGNACIONES (job_assignments)

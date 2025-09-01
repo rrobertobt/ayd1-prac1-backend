@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 
 @Getter
@@ -33,12 +32,12 @@ public class ServiceTypesEntity {
     private Double price;
 
     @Column(name = "estimated_time")
-    private Duration estimatedTime;
+    private Integer estimatedTime;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @Column(name = "update_at")
+    @Column(name = "updated_at")
     private LocalDateTime updateAt;
 
 

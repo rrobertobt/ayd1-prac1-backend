@@ -70,7 +70,7 @@ CREATE TABLE service_types (
   name varchar(200) NOT NULL,
   description text,
   price numeric(12,2) DEFAULT 0,
-  estimated_time interval,
+  estimated_time integer,
   created_at timestamp DEFAULT now(),
   updated_at timestamp DEFAULT now()
 );
@@ -142,7 +142,7 @@ CREATE TABLE jobs (
   description text,
   status varchar(50) DEFAULT 'PENDIENTE',
   authorized_at timestamp,
-  estimated_time varchar(100),
+  estimated_time integer,
   created_at timestamp DEFAULT now(),
   updated_at timestamp DEFAULT now()
 );
