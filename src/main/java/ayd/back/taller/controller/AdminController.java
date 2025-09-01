@@ -91,4 +91,10 @@ public class AdminController implements AdminApi {
         ResponseSuccessDto responseSuccessDto = ResponseSuccessDto.builder().code(HttpStatus.OK).message("The job was canceled").build();
         return new ResponseEntity<>(responseSuccessDto, responseSuccessDto.getCode());
     }
+
+    @Override
+    public ResponseEntity<ResponseSuccessDto> assignmentJob(JobAssignmentDto jobAssignmentDto, String token) {
+        //TODO hacer el servicio
+        return null;
+    }
 }
