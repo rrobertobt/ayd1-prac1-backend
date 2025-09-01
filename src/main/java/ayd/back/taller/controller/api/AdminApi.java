@@ -1,10 +1,8 @@
 package ayd.back.taller.controller.api;
 
-import ayd.back.taller.dto.request.CreateJobDto;
-import ayd.back.taller.dto.request.NewServiceTypeDto;
-import ayd.back.taller.dto.request.NewSpecialtiesDto;
-import ayd.back.taller.dto.request.UpdateServicePriceDto;
+import ayd.back.taller.dto.request.*;
 import ayd.back.taller.dto.response.ResponseSuccessDto;
+import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,7 +40,12 @@ public interface AdminApi {
 
 
 
+    @GetMapping("/job/status")
+    ResponseEntity<ResponseSuccessDto> getJobByStatus(@RequestHeader(value = "sessiont-token") String token,
+                                                      @RequestParam("id") String status);
 
-
+    @PostMapping("/job/cancel")
+    ResponseEntity<ResponseSuccessDto> cancelJob(@RequestBody CancelJobDto cancelJobDto,
+                                                 @RequestHeader(value = "session-token") String token);
 
 }

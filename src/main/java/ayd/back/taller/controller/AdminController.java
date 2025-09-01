@@ -1,10 +1,8 @@
 package ayd.back.taller.controller;
 
 import ayd.back.taller.controller.api.AdminApi;
-import ayd.back.taller.dto.request.CreateJobDto;
-import ayd.back.taller.dto.request.NewServiceTypeDto;
-import ayd.back.taller.dto.request.NewSpecialtiesDto;
-import ayd.back.taller.dto.request.UpdateServicePriceDto;
+import ayd.back.taller.dto.request.*;
+import ayd.back.taller.dto.response.JobDto;
 import ayd.back.taller.dto.response.ResponseSuccessDto;
 import ayd.back.taller.service.*;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +11,8 @@ import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -75,5 +75,20 @@ public class AdminController implements AdminApi {
         serviceTypeService.createServiceType(newServiceTypeDto);
         ResponseSuccessDto response = ResponseSuccessDto.builder().code(HttpStatus.CREATED).message("The service was created successfully").build();
         return new ResponseEntity<>(response, response.getCode());
+    }
+
+    @Override
+    public ResponseEntity<ResponseSuccessDto> getJobByStatus(String token, String status) {
+        ArrayList<JobDto> jobs = jobService.getJobsByStatus(status);
+        ResponseSuccessDto responseSuccessDto = ResponseSuccessDto.builder().code(HttpStatus.OK).body(jobs).build();
+        return new ResponseEntity<>(responseSuccessDto, responseSuccessDto.getCode());
+    }
+
+    @Override
+    public ResponseEntity<ResponseSuccessDto> cancelJob(CancelJobDto cancelJobDto, String token) {
+        sessionService.isAdmin(token);
+        jobService.cancelJob(cancelJobDto.getJobId());
+        ResponseSuccessDto responseSuccessDto = ResponseSuccessDto.builder().code(HttpStatus.OK).message("The job was canceled").build();
+        return new ResponseEntity<>(responseSuccessDto, responseSuccessDto.getCode());
     }
 }
