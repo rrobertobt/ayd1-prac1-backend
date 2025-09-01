@@ -126,7 +126,7 @@ CREATE TABLE jobs (
   id serial PRIMARY KEY,
   vehicle_id integer NOT NULL REFERENCES vehicles(id),
   description text,
-  status varchar(20) DEFAULT 'PENDIENTE',
+  status varchar(50) DEFAULT 'PENDIENTE',
   authorized_at timestamp,
   estimated_time numeric(12,2),  -- cambiado de INTERVAL a numeric
   created_at timestamp DEFAULT now(),

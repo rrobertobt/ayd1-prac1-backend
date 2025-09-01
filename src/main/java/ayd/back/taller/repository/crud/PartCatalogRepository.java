@@ -16,4 +16,6 @@ public interface PartCatalogRepository extends JpaRepository<PartCatalogEntity, 
 
     Optional<PartCatalogEntity> findBySupplierIdAndPartId(Integer supplierId, Integer partId);
 
+    Optional<PartCatalogEntity> findBySupplierIdIsNullAndPartId(Integer partId);
+
 }
