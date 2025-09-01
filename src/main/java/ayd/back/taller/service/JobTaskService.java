@@ -35,7 +35,7 @@ public class JobTaskService {
     private final ServiceTypesRepository serviceTypesRepository;
     private final SessionService sessionService;
     private final UserCrud userRepo;
-    private final JobAssignmentsRepository jobAssignmentsRepo;
+    private final JobService jobService;
     private final JobTaskMapper mapper;
 
     public JobTaskEntity getJobByStatus(TaskStatusEnum taskStatusEnum){
@@ -53,7 +53,7 @@ public class JobTaskService {
         sessionService.validateSessionToken(token);
 
         return Arrays.stream(TaskStatusEnum.values())
-                .map(enumValue -> enumValue.name()).collect(Collectors.toList());
+                .map(Enum::name).collect(Collectors.toList());
     }
 
     public List<JobTaskResponseDto> getTasksByJobId(Integer jobId, String token) {
@@ -125,14 +125,7 @@ public class JobTaskService {
 
         //si es empleado, solo puede agregar tarea si está asignado al trabajo
         if ( session.getRole().equals(UserRoleEnum.EMPLEADO) || session.getRole().equals(UserRoleEnum.ESPECIALISTA) ) {
-            List<JobAssignmentsEntity> jobAssignments = jobAssignmentsRepo.findByJob(job);
-            boolean userAssigned = false;
-            for (JobAssignmentsEntity j: jobAssignments) {
-                userAssigned = userAssigned || (user.getId() == j.getUser().getId());
-            }
-            if (!userAssigned) {
-                throw new BusinessException(HttpStatus.FORBIDDEN, "User does not have the necessary permissions");
-            }
+            jobService.validateEmployeeIsRelatedToJob(user.getId(), job);
         }
     }
 }

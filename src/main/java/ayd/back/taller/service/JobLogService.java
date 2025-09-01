@@ -3,14 +3,11 @@ package ayd.back.taller.service;
 import ayd.back.taller.dto.request.jobs.CreateJobLogRequestDto;
 import ayd.back.taller.dto.response.jobs.JobLogsResponseDto;
 import ayd.back.taller.dto.response.ResponseSuccessDto;
-import ayd.back.taller.dto.response.jobs.LogTypeResponseDto;
 import ayd.back.taller.exception.BusinessException;
 import ayd.back.taller.mappers.JobLogMapper;
-import ayd.back.taller.repository.crud.JobAssignmentsRepository;
 import ayd.back.taller.repository.crud.JobLogsRepository;
 import ayd.back.taller.repository.crud.JobRepository;
 import ayd.back.taller.repository.crud.UserCrud;
-import ayd.back.taller.repository.entities.JobAssignmentsEntity;
 import ayd.back.taller.repository.entities.JobEntity;
 import ayd.back.taller.repository.entities.JobLogsEntity;
 import ayd.back.taller.repository.entities.UserEntity;
@@ -35,14 +32,14 @@ public class JobLogService {
     private final JobLogsRepository jobLogsRepository;
     private final UserCrud userRepository;
     private final SessionService sessionService;
-    private final JobAssignmentsRepository jobAssignmentsRepo;
+    private final JobService jobService;
     private final JobLogMapper mapper;
 
     public List<String> getAllLogTypes(String token) {
         sessionService.validateSessionToken(token);
 
         return Arrays.stream(LogTypeEnum.values())
-                .map(enumValue -> enumValue.name()).collect(Collectors.toList());
+                .map(Enum::name).collect(Collectors.toList());
     }
 
 
@@ -70,20 +67,14 @@ public class JobLogService {
         }
 
         //si es cliente, solo puede agregar log si es el dueño del vehículo del que trata el trabajo
-        if (session.getRole().equals(UserRoleEnum.CLIENTE) && job.getVehicle().getOwner().getEmail() != session.getEmail()) {
+        if (session.getRole().equals(UserRoleEnum.CLIENTE) &&
+                !job.getVehicle().getOwner().getEmail().equals(session.getEmail())) {
             throw new BusinessException(HttpStatus.FORBIDDEN, "User does not have the necessary permissions");
         }
 
         //si es empleado, solo puede agregar log si está asignado al trabajo
         if ( session.getRole().equals(UserRoleEnum.EMPLEADO) || session.getRole().equals(UserRoleEnum.ESPECIALISTA) ) {
-            List<JobAssignmentsEntity> jobAssignments = jobAssignmentsRepo.findByJob(job);
-            boolean userAssigned = false;
-            for (JobAssignmentsEntity j: jobAssignments) {
-                userAssigned = userAssigned || (user.getEmail() == j.getUser().getEmail());
-            }
-            if (!userAssigned) {
-                throw new BusinessException(HttpStatus.FORBIDDEN, "User does not have the necessary permissions");
-            }
+            jobService.validateEmployeeIsRelatedToJob(user.getId(), job);
         }
 
         if (job.getStatus().equals(JobStatusEnum.PENDIENTE)) { //el trabajo no puede estar pendiente, debe ser autorizado antes de agregar logs
