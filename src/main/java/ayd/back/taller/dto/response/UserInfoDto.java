@@ -11,6 +11,8 @@ import lombok.Setter;
 @Setter
 public class UserInfoDto {
 
+    private Integer id;
+
     private String email;
 
     private Integer nit;

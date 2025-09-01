@@ -38,7 +38,11 @@ public interface AdminApi {
     ResponseEntity<ResponseSuccessDto> createServiceType(@RequestBody NewServiceTypeDto newServiceTypeDto,
                                                          @RequestHeader(value = "session-token") String token);
 
-
+      @GetMapping("/job/{id}")
+      ResponseEntity<ResponseSuccessDto> getJobById(
+              @RequestHeader(value = "session-token") String token,
+              @PathVariable Integer id
+      );
 
     @GetMapping("/job/status")
     ResponseEntity<ResponseSuccessDto> getJobByStatus(@RequestHeader(value = "sessiont-token") String token,

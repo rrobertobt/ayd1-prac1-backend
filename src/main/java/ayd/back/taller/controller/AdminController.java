@@ -71,6 +71,30 @@ public class AdminController implements AdminApi {
         return new ResponseEntity<>(responseSuccessDto, responseSuccessDto.getCode());
     }
 
+    // @Override
+    // public ResponseEntity<ResponseSuccessDto> getJobById(String token, Integer id) {
+    //     log.info("GET admin/job/{}", id);
+    //     ResponseSuccessDto responseSuccessDto = jobService.getJobById(id);
+    //     return new ResponseEntity<>(responseSuccessDto, responseSuccessDto.getCode());
+    // }
+
+    @Override
+    public ResponseEntity<ResponseSuccessDto> getJobById(String token, Integer id) {
+        log.info("GET /admin/job/{}", id);
+        sessionService.isAdmin(token);
+        var job = jobService.getJobById(id);
+        var dto = JobDto.builder()
+                .id(job.getId())
+                .vehiclePlate(job.getVehicle().getPlate())
+                .description(job.getDescription())
+                .estimatedTime(job.getEstimatedTime())
+                .status(job.getStatus().name())
+                .build();
+        var resp = ResponseSuccessDto.builder().code(HttpStatus.OK).body(dto).build();
+        return new ResponseEntity<>(resp, resp.getCode());
+    }
+    
+
     @Override
     public ResponseEntity<ResponseSuccessDto> createServiceType(NewServiceTypeDto newServiceTypeDto, String token) {
         log.info("POST admin/service_type");

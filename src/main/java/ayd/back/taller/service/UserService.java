@@ -110,6 +110,7 @@ public class UserService {
 
         users.forEach(user -> {
             UserInfoDto userInfoDto = UserInfoDto.builder()
+                    .id(user.getId())
                     .nit(user.getNit())
                     .name(user.getName())
                     .address(user.getAddress())
