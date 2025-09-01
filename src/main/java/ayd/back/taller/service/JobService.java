@@ -8,6 +8,7 @@ import ayd.back.taller.repository.crud.JobRepository;
 import ayd.back.taller.repository.crud.JobAssignmentsRepository;
 import ayd.back.taller.repository.entities.JobAssignmentsEntity;
 import ayd.back.taller.repository.entities.JobEntity;
+import ayd.back.taller.repository.entities.UserEntity;
 import ayd.back.taller.repository.entities.VehicleEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Slf4j
@@ -94,6 +96,16 @@ public class JobService {
         }catch (Exception exception){
             throw new BusinessException(HttpStatus.BAD_REQUEST,"The job has not been update");
         }
+    }
+
+    public JobEntity getJobById(Integer id){
+        Optional<JobEntity> optionalJobEntity = jobRepository.findById(id);
+
+        if(optionalJobEntity.isEmpty()){
+            throw new BusinessException(HttpStatus.NOT_FOUND, "The job was not found");
+        }
+
+        return optionalJobEntity.get();
     }
 
 }

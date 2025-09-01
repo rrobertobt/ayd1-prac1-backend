@@ -55,5 +55,13 @@ public interface AdminApi {
     ResponseEntity<ResponseSuccessDto> updateJobStatus(@RequestBody UpdateJobStatusDto updateJobStatusDto,
                                                        @RequestHeader(value = "session-token") String token);
 
+    @PostMapping("/job/assignment")
+    ResponseEntity<ResponseSuccessDto> assignUserForJob(@RequestBody JobAssignmentDto jobAssignmentDto,
+                                                        @RequestHeader(value = "session-token") String sessionToken);
+
+    @PutMapping("/job/assignment")
+    ResponseEntity<ResponseSuccessDto> updateUserForJob(@RequestBody UpdateJobAssignmentDto updateJobAssignmentDto,
+                                                        @RequestHeader(value = "session-token") String sessionToken);
+
 
 }

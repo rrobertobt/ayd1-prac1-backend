@@ -31,6 +31,8 @@ public class AdminController implements AdminApi {
 
     private final ServiceTypeService serviceTypeService;
 
+    private final JobAssignmentService jobAssignmentService;
+
     @Override
     public ResponseEntity<ResponseSuccessDto> getAllVehicles(String token) {
         log.info("GET /admin/vehicles");
@@ -107,5 +109,23 @@ public class AdminController implements AdminApi {
         jobService.updateJobStatus(updateJobStatusDto);
         ResponseSuccessDto responseSuccessDto = ResponseSuccessDto.builder().code(HttpStatus.OK).message("The job was updated successfully").build();
         return new ResponseEntity<>(responseSuccessDto,responseSuccessDto.getCode());
+    }
+
+    @Override
+    public ResponseEntity<ResponseSuccessDto> assignUserForJob(JobAssignmentDto jobAssignmentDto, String sessionToken) {
+        log.info("POST admin/job/assignment");
+        sessionService.isAdmin(sessionToken);
+        jobAssignmentService.assignJob(jobAssignmentDto);
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<ResponseSuccessDto> updateUserForJob(UpdateJobAssignmentDto updateJobAssignmentDto, String sessionToken) {
+        log.info("PUT admin/job/assignment");
+
+        sessionService.isAdmin(sessionToken);
+        jobAssignmentService.updateJobAssignment(updateJobAssignmentDto);
+        ResponseSuccessDto responseSuccessDto = ResponseSuccessDto.builder().code(HttpStatus.OK).message("The change of employee was successfully.").build();
+        return new ResponseEntity<>(responseSuccessDto, responseSuccessDto.getCode());
     }
 }
