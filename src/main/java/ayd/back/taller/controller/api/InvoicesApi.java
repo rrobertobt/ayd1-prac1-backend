@@ -1,11 +1,13 @@
 package ayd.back.taller.controller.api;
 
 import ayd.back.taller.dto.request.invoices.CreateInvoiceRequestDto;
+import ayd.back.taller.dto.response.ResponseSuccessDto;
 import ayd.back.taller.dto.response.invoices.InvoiceResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -25,7 +27,7 @@ public interface InvoicesApi {
             @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
     @PostMapping
-    InvoiceResponseDto createInvoice(
+    ResponseEntity<ResponseSuccessDto> createInvoice(
             @RequestHeader("session-token") String token,
             @RequestBody CreateInvoiceRequestDto request
     );
@@ -41,7 +43,7 @@ public interface InvoicesApi {
             @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
     @GetMapping("/client/{clientId}")
-    List<InvoiceResponseDto> getInvoicesByClient(
+    ResponseEntity<List<InvoiceResponseDto>> getInvoicesByClient(
             @RequestHeader("session-token") String token,
             @PathVariable Integer clientId
     );
@@ -57,7 +59,7 @@ public interface InvoicesApi {
             @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
     @GetMapping("/date")
-    List<InvoiceResponseDto> getInvoicesByDateRange(
+    ResponseEntity<List<InvoiceResponseDto>> getInvoicesByDateRange(
             @RequestHeader("session-token") String token,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate

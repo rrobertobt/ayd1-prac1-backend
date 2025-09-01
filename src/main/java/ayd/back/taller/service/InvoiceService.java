@@ -2,6 +2,7 @@ package ayd.back.taller.service;
 
 import ayd.back.taller.dto.request.invoices.CreateInvoiceRequestDto;
 import ayd.back.taller.dto.request.invoices.InvoiceItemRequestDto;
+import ayd.back.taller.dto.response.ResponseSuccessDto;
 import ayd.back.taller.dto.response.invoices.InvoiceItemResponseDto;
 import ayd.back.taller.dto.response.invoices.InvoiceResponseDto;
 import ayd.back.taller.exception.BusinessException;
@@ -32,7 +33,7 @@ public class InvoiceService {
     private final SessionService sessionService;
 
     @Transactional
-    public InvoiceResponseDto createInvoice(String token, CreateInvoiceRequestDto dto) {
+    public ResponseSuccessDto createInvoice(String token, CreateInvoiceRequestDto dto) {
         var adminSession = sessionService.isAdmin(token);
 
         UserEntity admin = userRepo.getUserByEmail(adminSession.getEmail())
@@ -70,8 +71,11 @@ public class InvoiceService {
             item.setAmount(itemDto.getAmount());
             invoice.getItems().add(item);
         }
-
-        return mapToResponse(invoiceRepository.save(invoice));
+        return ResponseSuccessDto.builder()
+                .code(HttpStatus.CREATED)
+                .message("Invoice created")
+                .body(mapToResponse(invoiceRepository.save(invoice)))
+                .build();
     }
 
     @Transactional(readOnly = true)
