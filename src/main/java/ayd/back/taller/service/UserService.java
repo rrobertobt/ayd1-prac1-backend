@@ -127,5 +127,15 @@ public class UserService {
         return usersInfo;
     }
 
+    public UserEntity getUserById(Integer id){
+        Optional<UserEntity> optionalUserEntity = userCrud.findById(id);
+
+        if(optionalUserEntity.isEmpty()){
+            throw new BusinessException(HttpStatus.NOT_FOUND, "The user was not found");
+        }
+
+        return optionalUserEntity.get();
+    }
+
 
 }
