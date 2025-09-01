@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import java.util.Optional;
@@ -30,4 +31,12 @@ public interface JobRepository extends JpaRepository<JobEntity,Integer> {
     @Modifying
     @Query(value = "UPDATE jobs SET status = ? WHERE id = ? ;", nativeQuery = true)
     void updateJobStatus(String status, Integer jobId);
+
+    @Query("""
+        SELECT j FROM JobEntity j 
+        JOIN j.vehicle v 
+        WHERE v.owner.id = :clientId
+    """)
+    List<JobEntity> findByClientId(Integer clientId);
+
 }

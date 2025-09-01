@@ -338,6 +338,14 @@ VALUES
     (5, 8, 'IMPREVISTO', now(), 'Inspección visual: pastillas con 60% uso restante.'),
     (5, 1, 'COMENTARIO', now(), 'Cliente solicita alineación urgente antes de entrega.');
 
+-- Calificaciones
+INSERT INTO job_logs (job_id, user_id, log_type, occurred_at, description)
+VALUES
+    (3, 10, 'CALIFICACION', now(), '10'),
+    (4, 11, 'CALIFICACION', now(), '9'),
+    (5, 12, 'CALIFICACION', now(), '5');
+
+
 -- =====================================
 -- PARTES USADAS EN TRABAJOS (job_parts) — 2 por trabajo
 -- =====================================

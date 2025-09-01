@@ -13,6 +13,7 @@ public enum LogTypeEnum {
     PRUEBA_TECNICA,
     SUGERENCIA,
     COMENTARIO,
-    APROBACION
+    APROBACION,
+    CALIFICACION
 
 }
