@@ -60,6 +60,7 @@ public class JobService {
             JobDto jobDto = JobDto.builder().id(jobStauts.getId()).vehiclePlate(jobStauts.getVehicle().getPlate())
                     .description(jobStauts.getDescription()).estimatedTime(jobStauts.getEstimatedTime())
                     .status(jobStauts.getStatus().name()).build();
+            jobs.add(jobDto);
         });
 
 
