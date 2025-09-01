@@ -9,6 +9,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -55,5 +56,13 @@ public class JobEntity {
     @Column(name = "updated_at", insertable = true, updatable = true)
     @CreationTimestamp
     private LocalDateTime updateAt;
+
+
+    @OneToMany(mappedBy = "job", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<JobAssignmentsEntity> assignments;
+
+    // Relación con tasks
+    @OneToMany(mappedBy = "job", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<JobTaskEntity> tasks;
 
 }
