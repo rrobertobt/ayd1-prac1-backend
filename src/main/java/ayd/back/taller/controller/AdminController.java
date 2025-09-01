@@ -1,15 +1,18 @@
 package ayd.back.taller.controller;
 
 import ayd.back.taller.controller.api.AdminApi;
-import ayd.back.taller.dto.request.UpdateServicePriceDto;
+import ayd.back.taller.dto.request.*;
+import ayd.back.taller.dto.response.JobDto;
 import ayd.back.taller.dto.response.ResponseSuccessDto;
-import ayd.back.taller.service.AdminService;
-import ayd.back.taller.service.SessionService;
+import ayd.back.taller.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.query.sqm.function.SelfRenderingSqmOrderedSetAggregateFunction;
+import org.apache.coyote.Response;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -20,6 +23,12 @@ public class AdminController implements AdminApi {
     private final AdminService adminService;
 
     private final SessionService sessionService;
+
+    private final SpecialtiesService specialtiesService;
+
+    private final JobService jobService;
+
+    private final ServiceTypeService serviceTypeService;
 
     @Override
     public ResponseEntity<ResponseSuccessDto> getAllVehicles(String token) {
@@ -37,8 +46,49 @@ public class AdminController implements AdminApi {
 
     @Override
     public ResponseEntity<ResponseSuccessDto> updateServicePrice(UpdateServicePriceDto updateServicePriceDto, String token) {
+        log.info("POST admin/service/price");
         sessionService.validateSessionToken(token);
         ResponseSuccessDto responseSuccessDto = adminService.updateServicePrice(updateServicePriceDto);
         return new ResponseEntity<>(responseSuccessDto,responseSuccessDto.getCode());
+    }
+
+    @Override
+    public ResponseEntity<ResponseSuccessDto> createSpecialties(NewSpecialtiesDto newSpecialtiesDto, String sessionToken) {
+        log.info("POST admin/specialties");
+        sessionService.isAdmin(sessionToken);
+        ResponseSuccessDto responseSuccessDto = specialtiesService.createSpecialties(newSpecialtiesDto.getName());
+        return new ResponseEntity<>(responseSuccessDto, responseSuccessDto.getCode());
+    }
+
+    @Override
+    public ResponseEntity<ResponseSuccessDto> createJob(CreateJobDto createJobDto, String token) {
+        log.info("POST admin/job");
+        jobService.createNewJob(createJobDto,token);
+        ResponseSuccessDto responseSuccessDto = ResponseSuccessDto.builder().code(HttpStatus.CREATED).message("The job was created successfully").build();
+        return new ResponseEntity<>(responseSuccessDto, responseSuccessDto.getCode());
+    }
+
+    @Override
+    public ResponseEntity<ResponseSuccessDto> createServiceType(NewServiceTypeDto newServiceTypeDto, String token) {
+        log.info("POST admin/service_type");
+        sessionService.isAdmin(token);
+        serviceTypeService.createServiceType(newServiceTypeDto);
+        ResponseSuccessDto response = ResponseSuccessDto.builder().code(HttpStatus.CREATED).message("The service was created successfully").build();
+        return new ResponseEntity<>(response, response.getCode());
+    }
+
+    @Override
+    public ResponseEntity<ResponseSuccessDto> getJobByStatus(String token, String status) {
+        ArrayList<JobDto> jobs = jobService.getJobsByStatus(status);
+        ResponseSuccessDto responseSuccessDto = ResponseSuccessDto.builder().code(HttpStatus.OK).body(jobs).build();
+        return new ResponseEntity<>(responseSuccessDto, responseSuccessDto.getCode());
+    }
+
+    @Override
+    public ResponseEntity<ResponseSuccessDto> cancelJob(CancelJobDto cancelJobDto, String token) {
+        sessionService.isAdmin(token);
+        jobService.cancelJob(cancelJobDto.getJobId());
+        ResponseSuccessDto responseSuccessDto = ResponseSuccessDto.builder().code(HttpStatus.OK).message("The job was canceled").build();
+        return new ResponseEntity<>(responseSuccessDto, responseSuccessDto.getCode());
     }
 }

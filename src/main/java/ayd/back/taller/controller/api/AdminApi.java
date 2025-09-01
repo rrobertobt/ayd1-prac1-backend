@@ -1,7 +1,8 @@
 package ayd.back.taller.controller.api;
 
-import ayd.back.taller.dto.request.UpdateServicePriceDto;
+import ayd.back.taller.dto.request.*;
 import ayd.back.taller.dto.response.ResponseSuccessDto;
+import org.springframework.data.querydsl.binding.QuerydslPredicate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +22,30 @@ public interface AdminApi {
     ResponseEntity<ResponseSuccessDto> updateServicePrice(@RequestBody UpdateServicePriceDto updateServicePriceDto,
                                                           @RequestHeader(value = "session-token") String token);
 
+    @PostMapping("/specialties")
+    ResponseEntity<ResponseSuccessDto> createSpecialties(@RequestBody NewSpecialtiesDto newSpecialtiesDto,
+                                                         @RequestHeader(value = "session-token") String sessionToken);
 
+
+
+    @PostMapping("/job")
+    ResponseEntity<ResponseSuccessDto> createJob(@RequestBody CreateJobDto createJobDto,
+                                                 @RequestHeader(value = "session-token") String token);
+
+
+
+    @PostMapping("/service_type")
+    ResponseEntity<ResponseSuccessDto> createServiceType(@RequestBody NewServiceTypeDto newServiceTypeDto,
+                                                         @RequestHeader(value = "session-token") String token);
+
+
+
+    @GetMapping("/job/status")
+    ResponseEntity<ResponseSuccessDto> getJobByStatus(@RequestHeader(value = "sessiont-token") String token,
+                                                      @RequestParam("id") String status);
+
+    @PostMapping("/job/cancel")
+    ResponseEntity<ResponseSuccessDto> cancelJob(@RequestBody CancelJobDto cancelJobDto,
+                                                 @RequestHeader(value = "session-token") String token);
 
 }

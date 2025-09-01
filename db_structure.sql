@@ -1,16 +1,3 @@
--- === ENUMS ===
---CREATE TYPE user_role_t AS ENUM ('admin','empleado','especialista','cliente','proveedor');
---CREATE TYPE twofa_method_t AS ENUM ('email','sms');
---CREATE TYPE log_type_t AS ENUM ('avance', 'diagnostico','observación','síntoma detectado',
-  --'imprevisto', 'reportar daño adicional', 'solicitud de servicio adicional', 'solicitud de especialista',
-  --'prueba tecnica', 'sugerencia', 'comentario', 'aprobacion');
---CREATE TYPE job_status_t AS ENUM ('borrador', 'pendiente', 'autorizado', 'en espera', 'en curso',
-  --'necesita especialista', 'cancelado', 'completado', 'cerrado');
---CREATE TYPE task_status_t AS ENUM ('pendiente','iniciado','en progreso','completado','cancelado');
---CREATE TYPE invoice_status_t AS ENUM ('borrador','emitido', 'parcial', 'pagado', 'cancelado', 'reembolsado');
---CREATE TYPE payment_method_t AS ENUM ('efectivo','tarjeta','transferencia','otro');
---CREATE TYPE purchase_status_t AS ENUM ('borrador','ordenado','recibido','cancelado');
-
 DROP TABLE IF EXISTS users CASCADE;
 CREATE TABLE users (
   id serial PRIMARY KEY,
@@ -70,7 +57,7 @@ CREATE TABLE service_types (
   name varchar(200) NOT NULL,
   description text,
   price numeric(12,2) DEFAULT 0,
-  estimated_time integer,
+  estimated_time numeric(12,2),  -- cambiado de INTERVAL a numeric
   created_at timestamp DEFAULT now(),
   updated_at timestamp DEFAULT now()
 );
@@ -122,7 +109,6 @@ CREATE TABLE purchase_orders (
   updated_at timestamp DEFAULT now()
 );
 
-
 DROP TABLE IF EXISTS purchase_order_items CASCADE;
 CREATE TABLE purchase_order_items (
   purchase_order_id integer NOT NULL REFERENCES purchase_orders(id),
@@ -142,7 +128,7 @@ CREATE TABLE jobs (
   description text,
   status varchar(50) DEFAULT 'PENDIENTE',
   authorized_at timestamp,
-  estimated_time integer,
+  estimated_time numeric(12,2),  -- cambiado de INTERVAL a numeric
   created_at timestamp DEFAULT now(),
   updated_at timestamp DEFAULT now()
 );
@@ -178,7 +164,6 @@ CREATE TABLE job_logs (
   created_at timestamp DEFAULT now(),
   updated_at timestamp DEFAULT now()
 );
-
 
 -- Repuestos usados en un trabajo
 DROP TABLE IF EXISTS job_parts CASCADE;
@@ -227,10 +212,9 @@ CREATE TABLE payments (
   created_at timestamp DEFAULT now()
 );
 
-
 DROP TABLE IF EXISTS session CASCADE;
 CREATE TABLE session(
-	token varchar(50) primary key,
-	user_id integer not null references users(id),
-	expired_at timestamp not null
+  token varchar(50) primary key,
+  user_id integer not null references users(id),
+  expired_at timestamp not null
 );
