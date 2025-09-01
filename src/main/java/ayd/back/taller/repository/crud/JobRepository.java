@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import java.util.Optional;
@@ -25,4 +26,12 @@ public interface JobRepository extends JpaRepository<JobEntity,Integer> {
 
     @Query(value = "SELECT * FROM jobs WHERE id = ?;", nativeQuery = true)
     Optional<JobEntity> findById(Integer id);
+
+    @Query("""
+        SELECT j FROM JobEntity j 
+        JOIN j.vehicle v 
+        WHERE v.owner.id = :clientId
+    """)
+    List<JobEntity> findByClientId(Integer clientId);
+
 }
