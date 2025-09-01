@@ -73,13 +73,14 @@ public class SessionService {
         return sessionResponseDto;
     }
 
-    public void isAdmin(String sessionToken){
+    public SessionResponseDto isAdmin(String sessionToken){
 
         SessionResponseDto sessionResponseDto = validateSessionToken(sessionToken);
 
         if(!sessionResponseDto.getRole().equals(UserRoleEnum.ADMIN)){
             throw new BusinessException(HttpStatus.UNAUTHORIZED,"The token does not belong to an administrator user.");
         }
+        return sessionResponseDto;
     }
 
 

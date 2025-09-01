@@ -7,15 +7,12 @@ import ayd.back.taller.dto.response.UserInfoDto;
 import ayd.back.taller.exception.BusinessException;
 import ayd.back.taller.mappers.UserMapper;
 import ayd.back.taller.repository.crud.UserCrud;
-import ayd.back.taller.repository.entities.SessionEntity;
 import ayd.back.taller.repository.entities.UserEntity;
 import ayd.back.taller.repository.enums.UserRoleEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.web.server.header.CrossOriginEmbedderPolicyServerHttpHeadersWriter;
 import org.springframework.stereotype.Service;
-import org.w3c.dom.stylesheets.LinkStyle;
 
 import java.util.ArrayList;
 import java.util.List;
