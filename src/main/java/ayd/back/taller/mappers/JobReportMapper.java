@@ -1,4 +1,4 @@
-package ayd.back.taller.mapper;
+package ayd.back.taller.mappers;
 
 import ayd.back.taller.dto.response.reports.JobReportResponseDto;
 import ayd.back.taller.repository.entities.JobEntity;
